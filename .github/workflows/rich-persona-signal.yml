@@ -1,0 +1,50 @@
+name: rich-persona-signal
+
+on:
+  push:
+    branches: ["research/rich-persona-signal"]
+  workflow_dispatch:
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install experiment dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy pandas scikit-learn
+
+      - name: Verify committed research data
+        run: |
+          ls -lh outputs/personas/customer_features.csv.zip
+          ls -lh outputs/products/txns_trousers_online.csv.zip
+          ls -lh outputs/products/product_info_top100_online.csv
+
+      - name: Run representation signal gate
+        run: |
+          python scripts/experiment_rich_persona_signal.py \
+            --bootstrap-reps 100 \
+            --bootstrap-n 50000
+
+      - name: Show report
+        if: always()
+        run: |
+          if [ -f outputs/research/rich_persona_signal/REPORT.md ]; then
+            cat outputs/research/rich_persona_signal/REPORT.md
+          fi
+
+      - name: Upload experiment outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rich-persona-signal-results
+          path: outputs/research/rich_persona_signal/
+          if-no-files-found: warn

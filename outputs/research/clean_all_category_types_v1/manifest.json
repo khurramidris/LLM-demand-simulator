@@ -1,0 +1,13 @@
+{
+  "protocol": "CLEAN-ALL-CATEGORY-TYPES-v1",
+  "history_start": "2018-09-01",
+  "history_end": "2019-09-19",
+  "heldout_rule": "40 split_000 test article_ids removed before every all-category behavioral feature",
+  "source": "microsoft/hnm-search-data",
+  "source_revision": "refs/convert/parquet",
+  "source_use": "non-commercial research only; raw data downloaded at runtime and never committed",
+  "primary_gate": "clean_all_category_types must have lower held-out NLL and CRPS than coarse_trouser_types, with MAE and RMSE no worse than +1%",
+  "provider": "fixed empirical semantic-utility policy; no held-out demand labels; no LLM calls in this gate",
+  "k_coarse": 8,
+  "k_rich": 24
+}

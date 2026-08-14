@@ -1,0 +1,119 @@
+{
+  "protocol": "CLEAN-ALL-CATEGORY-TYPES-v1",
+  "decision": "DO_NOT_ADVANCE_CLEAN_RICH_TYPES_TO_GPT56",
+  "primary_gate_passed": false,
+  "summary": {
+    "coarse_trouser_types_empirical_utility": {
+      "mae": 1.328666906816646,
+      "rmse": 1.7074726288328883,
+      "zt_avg_nll": 1.7735394688556656,
+      "zt_avg_crps": 0.9032341496734778,
+      "zt_pit_ks": 0.2900485769806672,
+      "zt_interval_score_0.9": 8.994101537813355,
+      "zt_interval_score_0.95": 12.283126184958913
+    },
+    "clean_all_category_types_empirical_utility": {
+      "mae": 1.3306227005390976,
+      "rmse": 1.7094441649309011,
+      "zt_avg_nll": 1.771946395712279,
+      "zt_avg_crps": 0.9038186310827889,
+      "zt_pit_ks": 0.2880122166346427,
+      "zt_interval_score_0.9": 8.535496102801769,
+      "zt_interval_score_0.95": 12.283547503686531
+    },
+    "paper_llm_mix_cal": {
+      "mae": 1.3529455874757736,
+      "rmse": 1.7285789164833791,
+      "zt_avg_nll": 1.7799559361273736,
+      "zt_avg_crps": 0.9168211594164736,
+      "zt_pit_ks": 0.2942716575670137,
+      "zt_interval_score_0.9": 8.402359384874657,
+      "zt_interval_score_0.95": 12.183905624605003
+    },
+    "previous_fresh_gpt56": {
+      "mae": 1.3282012402745298,
+      "rmse": 1.7071108507548496,
+      "zt_avg_nll": 1.7724390784054278,
+      "zt_avg_crps": 0.9028253419001474,
+      "zt_pit_ks": 0.2894822151148417,
+      "zt_interval_score_0.9": 8.870233831893827,
+      "zt_interval_score_0.95": 12.283126184958913
+    }
+  },
+  "fits": {
+    "coarse_trouser_types_empirical_utility": {
+      "exposure_n": 250,
+      "intercept": -4.890906489503164,
+      "slope": 0.006737946999085467,
+      "train_zt_nll": 1.8388546311482599,
+      "success": true
+    },
+    "clean_all_category_types_empirical_utility": {
+      "exposure_n": 250,
+      "intercept": -4.878211499767367,
+      "slope": 0.04865832838043962,
+      "train_zt_nll": 1.8370750435095673,
+      "success": true
+    }
+  },
+  "effects_rich_vs_coarse": {
+    "zt_avg_nll": {
+      "absolute": -0.0015930731433866363,
+      "relative": -0.0008982451032874555
+    },
+    "zt_avg_crps": {
+      "absolute": 0.0005844814093111106,
+      "relative": 0.0006470984401136765
+    },
+    "mae": {
+      "absolute": 0.001955793722451693,
+      "relative": 0.0014719970162706776
+    },
+    "rmse": {
+      "absolute": 0.001971536098012816,
+      "relative": 0.001154651655740112
+    }
+  },
+  "product_bootstrap_rich_vs_coarse": {
+    "zt_avg_nll": {
+      "treatment_minus_control_mean": -0.0016797934844256395,
+      "ci95_low": -0.011460404125927548,
+      "ci95_high": 0.006121845243052588,
+      "p_treatment_better": 0.6221
+    },
+    "zt_avg_crps": {
+      "treatment_minus_control_mean": 0.0005300728390940313,
+      "ci95_low": -0.004280253013568503,
+      "ci95_high": 0.005310194558013394,
+      "p_treatment_better": 0.41225
+    },
+    "mae": {
+      "treatment_minus_control_mean": 0.0018811901549932739,
+      "ci95_low": -0.008570439051899694,
+      "ci95_high": 0.012101634421539902,
+      "p_treatment_better": 0.3597
+    }
+  },
+  "population": {
+    "n_customers": 1371980,
+    "n_active_clean_history": 1004835,
+    "n_clean_rich_types": 30,
+    "n_clean_coarse_types": 14,
+    "largest_rich_type_weight": 0.10104010262540271,
+    "largest_coarse_type_weight": 0.27548870974795553
+  },
+  "manifest": {
+    "protocol": "CLEAN-ALL-CATEGORY-TYPES-v1",
+    "history_start": "2018-09-01",
+    "history_end": "2019-09-19",
+    "heldout_rule": "40 split_000 test article_ids removed before every all-category behavioral feature",
+    "source": "microsoft/hnm-search-data",
+    "source_revision": "refs/convert/parquet",
+    "source_use": "non-commercial research only; raw data downloaded at runtime and never committed",
+    "primary_gate": "clean_all_category_types must have lower held-out NLL and CRPS than coarse_trouser_types, with MAE and RMSE no worse than +1%",
+    "provider": "fixed empirical semantic-utility policy; no held-out demand labels; no LLM calls in this gate",
+    "k_coarse": 8,
+    "k_rich": 24
+  },
+  "interpretation": "This gate tests whether leakage-safe all-category behavioral representation adds held-out demand signal under one fixed empirical relative-utility provider. It does not yet test GPT-5.6 elicitation."
+}

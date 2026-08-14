@@ -1,0 +1,17 @@
+{
+  "protocol": "FRESH-GPT56-RELATIVE-UTILITY-SPLIT0-v1",
+  "split": 0,
+  "n_train_products": 60,
+  "n_test_products": 40,
+  "n_catalog_products": 100,
+  "n_types": 9,
+  "provider_blinding": "Provider prompt contains no train/test labels and no demand/sales outcomes.",
+  "history_rule": "Held-out product transactions are excluded before learned-type clustering and type evidence summaries.",
+  "pre_registered_primary_gate": "Fresh learned-type relative utility must beat paper llm-mix-cal on held-out NLL and CRPS, with MAE/RMSE no worse than +1%.",
+  "secondary_question": "Does fresh GPT-5.6 relative utility beat the zero-new-call empirical-persona relative-utility surrogate on held-out NLL or CRPS?",
+  "limitations": [
+    "Original top-50 persona membership uses the repository precomputed full-period customer_features artifact.",
+    "Candidate price grids are historically observed and shared with the paper.",
+    "GPT-5.6 judgments are produced inside this conversation rather than independent API calls."
+  ]
+}

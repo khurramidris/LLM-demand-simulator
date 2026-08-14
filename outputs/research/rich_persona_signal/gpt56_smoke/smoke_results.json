@@ -1,0 +1,164 @@
+{
+  "protocol": "GPT56-MATCHED-CELL-SMOKE-v1",
+  "audit_status": "VALID",
+  "provenance_class": "single_conversation_batched_non_independent",
+  "n_response_records": 100,
+  "n_unique_pairs": 50,
+  "n_personas": 10,
+  "n_products": 5,
+  "source_counts": {
+    "responses_397068015.jsonl": 20,
+    "responses_539723038.jsonl": 20,
+    "responses_547780003.jsonl": 20,
+    "responses_562245006.jsonl": 20,
+    "responses_562245059.jsonl": 20
+  },
+  "schema_and_curve_checks": {
+    "all_price_grids_exact": true,
+    "all_probabilities_finite_and_in_range": true,
+    "overall_monotone_nonincreasing_rate": 1.0,
+    "overall_flat_curve_rate": 0.0
+  },
+  "paired_shift": {
+    "mean_delta_rich_minus_control": 0.073942,
+    "median_delta_rich_minus_control": 0.08320000000000002,
+    "mean_abs_point_delta": 0.118994,
+    "median_abs_point_delta": 0.11165,
+    "fraction_pairs_rich_higher": 0.6,
+    "fraction_pairs_rich_lower": 0.4
+  },
+  "history_alignment": {
+    "unit_of_analysis": "10 persona-level mean shifts (five products averaged per persona)",
+    "spearman_rho_history_share_vs_rich_shift": 0.9272727272727272,
+    "spearman_pvalue_descriptive_only": 0.00011203450639397586,
+    "warning": "Not a causal/significance test: outputs are non-independent and the model saw the treatment context."
+  },
+  "arm_summary": [
+    {
+      "arm": "control",
+      "mean_probability": 0.300248,
+      "mean_low_price_probability": 0.4349,
+      "mean_high_price_probability": 0.20594,
+      "mean_price_drop": 0.22896,
+      "monotone_rate": 1.0,
+      "flat_curve_rate": 0.0
+    },
+    {
+      "arm": "rich",
+      "mean_probability": 0.37418999999999997,
+      "mean_low_price_probability": 0.49722,
+      "mean_high_price_probability": 0.2807,
+      "mean_price_drop": 0.21652000000000002,
+      "monotone_rate": 1.0,
+      "flat_curve_rate": 0.0
+    }
+  ],
+  "persona_summary": [
+    {
+      "persona_id": "P017",
+      "share_with_trouser_history": 0.4342441517593867,
+      "mean_delta_rich_minus_control": 0.22016,
+      "mean_abs_point_delta": 0.22016,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P019",
+      "share_with_trouser_history": 0.0362272240085744,
+      "mean_delta_rich_minus_control": -0.10840000000000001,
+      "mean_abs_point_delta": 0.10840000000000001,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P031",
+      "share_with_trouser_history": 0.5093260382989306,
+      "mean_delta_rich_minus_control": 0.121,
+      "mean_abs_point_delta": 0.121,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P038",
+      "share_with_trouser_history": 0.1609074122922711,
+      "mean_delta_rich_minus_control": -0.08918,
+      "mean_abs_point_delta": 0.08918,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P039",
+      "share_with_trouser_history": 0.2168036045587066,
+      "mean_delta_rich_minus_control": -0.019540000000000002,
+      "mean_abs_point_delta": 0.019540000000000002,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P041",
+      "share_with_trouser_history": 0.5761217948717948,
+      "mean_delta_rich_minus_control": 0.25460000000000005,
+      "mean_abs_point_delta": 0.25460000000000005,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P042",
+      "share_with_trouser_history": 0.3121261555193039,
+      "mean_delta_rich_minus_control": 0.11638000000000001,
+      "mean_abs_point_delta": 0.11638000000000001,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P043",
+      "share_with_trouser_history": 0.3691106774463339,
+      "mean_delta_rich_minus_control": -0.007759999999999994,
+      "mean_abs_point_delta": 0.00851999999999999,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P045",
+      "share_with_trouser_history": 0.4132231404958678,
+      "mean_delta_rich_minus_control": 0.19414,
+      "mean_abs_point_delta": 0.19414,
+      "n_products": 5
+    },
+    {
+      "persona_id": "P049",
+      "share_with_trouser_history": 0.2596830985915493,
+      "mean_delta_rich_minus_control": 0.05802,
+      "mean_abs_point_delta": 0.05802,
+      "n_products": 5
+    }
+  ],
+  "product_summary": [
+    {
+      "article_id": 397068015,
+      "mean_delta_rich_minus_control": 0.07347000000000001,
+      "mean_abs_point_delta": 0.10611,
+      "n_personas": 10
+    },
+    {
+      "article_id": 539723038,
+      "mean_delta_rich_minus_control": 0.06477,
+      "mean_abs_point_delta": 0.11783000000000002,
+      "n_personas": 10
+    },
+    {
+      "article_id": 547780003,
+      "mean_delta_rich_minus_control": 0.08019,
+      "mean_abs_point_delta": 0.13027,
+      "n_personas": 10
+    },
+    {
+      "article_id": 562245006,
+      "mean_delta_rich_minus_control": 0.07407,
+      "mean_abs_point_delta": 0.11931,
+      "n_personas": 10
+    },
+    {
+      "article_id": 562245059,
+      "mean_delta_rich_minus_control": 0.07721000000000001,
+      "mean_abs_point_delta": 0.12145000000000002,
+      "n_personas": 10
+    }
+  ],
+  "scientific_scope": {
+    "supported": "The frozen richer prompt changes this model's elicited price-response curves in a coherent, history-aligned way while preserving schema and downward price response.",
+    "not_supported": "Any claim that rich personas improve held-out H&M aggregate demand prediction or causal pricing decisions."
+  }
+}

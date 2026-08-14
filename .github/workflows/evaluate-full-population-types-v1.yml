@@ -18,7 +18,7 @@ jobs:
           python-version: '3.11'
       - run: pip install numpy pandas scipy
       - name: Evaluate frozen population representations
-        run: python scripts/evaluate_full_population_types_v1.py
+        run: PYTHONPATH=. python scripts/evaluate_full_population_types_v1.py
       - name: Show report
         run: cat outputs/research/full_population_types_v1/REPORT.md
       - name: Persist result

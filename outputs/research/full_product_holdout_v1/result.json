@@ -1,0 +1,511 @@
+{
+  "protocol": "FULL-PRODUCT-HOLDOUT-LEARNED-UTILITY-v1",
+  "decision": "ADVANCE_TO_FRESH_PAIRWISE_LLM",
+  "pre_registered_gate": {
+    "requirements": [
+      "mean NLL lower than paper llm-mix-cal",
+      "mean CRPS lower than paper llm-mix-cal",
+      "mean MAE and RMSE no worse than +1%",
+      "NLL wins on at least 4 of 7 original paper product splits"
+    ]
+  },
+  "aggregate": {
+    "paper_llm_mix_cal": {
+      "zt_avg_nll": {
+        "mean": 1.8269561850148193,
+        "std": 0.11420007686364085
+      },
+      "zt_avg_crps": {
+        "mean": 0.9412178538063628,
+        "std": 0.05991566053802213
+      },
+      "mae": {
+        "mean": 1.3821733569102246,
+        "std": 0.04014185748825257
+      },
+      "rmse": {
+        "mean": 1.7844073130575846,
+        "std": 0.10134318856329909
+      }
+    },
+    "empirical_persona_relative_utility": {
+      "zt_avg_nll": {
+        "mean": 1.820485301974788,
+        "std": 0.11776939607090398
+      },
+      "zt_avg_crps": {
+        "mean": 0.9318467034182117,
+        "std": 0.06176313950083386
+      },
+      "mae": {
+        "mean": 1.3677695934764356,
+        "std": 0.040820376502641566
+      },
+      "rmse": {
+        "mean": 1.7707352074855807,
+        "std": 0.10450055996243224
+      }
+    },
+    "learned_type_relative_utility": {
+      "zt_avg_nll": {
+        "mean": 1.8204911100241843,
+        "std": 0.11776962824718273
+      },
+      "zt_avg_crps": {
+        "mean": 0.9318569031262471,
+        "std": 0.061765181274718965
+      },
+      "mae": {
+        "mean": 1.367795071055182,
+        "std": 0.04082345557577452
+      },
+      "rmse": {
+        "mean": 1.7707513378539537,
+        "std": 0.10450346605955162
+      }
+    }
+  },
+  "paired_split_bootstrap": {
+    "empirical_persona_relative_utility": {
+      "zt_avg_nll": {
+        "mean_difference": -0.006470883040031072,
+        "ci95_low": -0.014662201650161886,
+        "ci95_high": 0.0003941508584548765,
+        "n_splits_better": 5,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 0.9679
+      },
+      "zt_avg_crps": {
+        "mean_difference": -0.009371150388151126,
+        "ci95_low": -0.014581125394568307,
+        "ci95_high": -0.005314830834723251,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      },
+      "mae": {
+        "mean_difference": -0.014403763433789114,
+        "ci95_low": -0.02055698394375795,
+        "ci95_high": -0.009173453207752763,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      },
+      "rmse": {
+        "mean_difference": -0.013672105572003934,
+        "ci95_low": -0.020786424879729783,
+        "ci95_high": -0.007969358312958466,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      }
+    },
+    "learned_type_relative_utility": {
+      "zt_avg_nll": {
+        "mean_difference": -0.006465074990635041,
+        "ci95_low": -0.014638081037236596,
+        "ci95_high": 0.00039283757325555717,
+        "n_splits_better": 5,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 0.9679
+      },
+      "zt_avg_crps": {
+        "mean_difference": -0.00936095068011568,
+        "ci95_low": -0.014564673501427518,
+        "ci95_high": -0.005304630985639713,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      },
+      "mae": {
+        "mean_difference": -0.01437828585504275,
+        "ci95_low": -0.020517299941581628,
+        "ci95_high": -0.009141264867312822,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      },
+      "rmse": {
+        "mean_difference": -0.013655975203631219,
+        "ci95_low": -0.020752082603996542,
+        "ci95_high": -0.007980537383760129,
+        "n_splits_better": 7,
+        "n_splits": 7,
+        "bootstrap_p_mean_better": 1.0
+      }
+    }
+  },
+  "splits": [
+    {
+      "split": 0,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.8603938410730185,
+          "slope": 0.06691853728758135,
+          "train_zt_nll": 1.8350594180495619,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.860278612789375,
+          "slope": 0.06704046438032289,
+          "train_zt_nll": 1.8350558169197906,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.3529455874757736,
+          "rmse": 1.7285789164833791,
+          "zt_avg_nll": 1.7799559361273736,
+          "zt_avg_crps": 0.9168211594164736,
+          "zt_pit_ks": 0.2942716575670137,
+          "zt_interval_score_0.9": 8.402359384874657,
+          "zt_interval_score_0.95": 12.183905624605003
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.3332540154688772,
+          "rmse": 1.7112002550200733,
+          "zt_avg_nll": 1.7713933027653657,
+          "zt_avg_crps": 0.905507125500316,
+          "zt_pit_ks": 0.28758921661032766,
+          "zt_interval_score_0.9": 8.370339161575732,
+          "zt_interval_score_0.95": 12.282704866231297
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.3332957125922626,
+          "rmse": 1.7112204735599457,
+          "zt_avg_nll": 1.7713887777024784,
+          "zt_avg_crps": 0.9055129730882663,
+          "zt_pit_ks": 0.28759642320679796,
+          "zt_interval_score_0.9": 8.370339161575732,
+          "zt_interval_score_0.95": 12.282704866231297
+        }
+      }
+    },
+    {
+      "split": 1,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.831926755795836,
+          "slope": 0.04395716355395933,
+          "train_zt_nll": 1.8559377132263848,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.831890086423635,
+          "slope": 0.044000849202802124,
+          "train_zt_nll": 1.85593765808365,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.3505726483151042,
+          "rmse": 1.7178833519966703,
+          "zt_avg_nll": 1.7466022105197652,
+          "zt_avg_crps": 0.8945000102040817,
+          "zt_pit_ks": 0.309555521529528,
+          "zt_interval_score_0.9": 7.9954185755935026,
+          "zt_interval_score_0.95": 11.696376509787582
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.342156226698171,
+          "rmse": 1.7102520516246162,
+          "zt_avg_nll": 1.7450619144901653,
+          "zt_avg_crps": 0.8886115506039151,
+          "zt_pit_ks": 0.30961520498344236,
+          "zt_interval_score_0.9": 8.042690545605998,
+          "zt_interval_score_0.95": 11.888379841732604
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.3421311013660457,
+          "rmse": 1.710238573350855,
+          "zt_avg_nll": 1.7450543136984198,
+          "zt_avg_crps": 0.8886043135672637,
+          "zt_pit_ks": 0.3096054295779938,
+          "zt_interval_score_0.9": 8.042690545605998,
+          "zt_interval_score_0.95": 11.888379841732604
+        }
+      }
+    },
+    {
+      "split": 2,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.791225484632295,
+          "slope": 0.055005551411264016,
+          "train_zt_nll": 1.9271140433478535,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.791170314850162,
+          "slope": 0.05505039814436808,
+          "train_zt_nll": 1.9271163456265472,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.3347999849792191,
+          "rmse": 1.6528321220984392,
+          "zt_avg_nll": 1.664590416659238,
+          "zt_avg_crps": 0.8612708395870557,
+          "zt_pit_ks": 0.314106478508285,
+          "zt_interval_score_0.9": 7.29442128250943,
+          "zt_interval_score_0.95": 10.30077427039904
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.3290864104457125,
+          "rmse": 1.6444120198642749,
+          "zt_avg_nll": 1.662588151054201,
+          "zt_avg_crps": 0.8566578442525312,
+          "zt_pit_ks": 0.31422262335278,
+          "zt_interval_score_0.9": 7.311296406591225,
+          "zt_interval_score_0.95": 10.47369465951955
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.329087357196456,
+          "rmse": 1.6444039063974194,
+          "zt_avg_nll": 1.6625789223772254,
+          "zt_avg_crps": 0.8566540891899941,
+          "zt_pit_ks": 0.3142234441587167,
+          "zt_interval_score_0.9": 7.311296406591225,
+          "zt_interval_score_0.95": 10.47369465951955
+        }
+      }
+    },
+    {
+      "split": 3,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.806738804426903,
+          "slope": 0.07284491199614859,
+          "train_zt_nll": 1.8536650958955432,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.806539175693613,
+          "slope": 0.07317286975645955,
+          "train_zt_nll": 1.8536423414016616,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.3775524430713402,
+          "rmse": 1.7376806149682298,
+          "zt_avg_nll": 1.7761283399446772,
+          "zt_avg_crps": 0.915716411968912,
+          "zt_pit_ks": 0.3215010510163473,
+          "zt_interval_score_0.9": 8.292020725388602,
+          "zt_interval_score_0.95": 11.925595854922271
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.347726368990097,
+          "rmse": 1.7056821578171597,
+          "zt_avg_nll": 1.7487989493774614,
+          "zt_avg_crps": 0.8927373048704663,
+          "zt_pit_ks": 0.3130752419931343,
+          "zt_interval_score_0.9": 8.06238341968912,
+          "zt_interval_score_0.95": 11.79233160621761
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.3477821895171656,
+          "rmse": 1.7057325548796762,
+          "zt_avg_nll": 1.748840038247421,
+          "zt_avg_crps": 0.8927752448186528,
+          "zt_pit_ks": 0.3130643043812317,
+          "zt_interval_score_0.9": 8.06238341968912,
+          "zt_interval_score_0.95": 11.792746113989631
+        }
+      }
+    },
+    {
+      "split": 4,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.924611343314817,
+          "slope": 0.044093803037251876,
+          "train_zt_nll": 1.7207578618260038,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.924484252457786,
+          "slope": 0.044286269353496506,
+          "train_zt_nll": 1.7207486824169396,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.4328217157921073,
+          "rmse": 1.909382911273446,
+          "zt_avg_nll": 1.96376599182107,
+          "zt_avg_crps": 1.0183798837634164,
+          "zt_pit_ks": 0.2932224772723916,
+          "zt_interval_score_0.9": 10.773235898606988,
+          "zt_interval_score_0.95": 15.95683946106416
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.4246585328163357,
+          "rmse": 1.9042686163065061,
+          "zt_avg_nll": 1.9638863969828957,
+          "zt_avg_crps": 1.014820268497374,
+          "zt_pit_ks": 0.2908088302123622,
+          "zt_interval_score_0.9": 11.079926923955242,
+          "zt_interval_score_0.95": 15.807261931947924
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.4246958542385886,
+          "rmse": 1.9042878039592626,
+          "zt_avg_nll": 1.963882674571519,
+          "zt_avg_crps": 1.014834647236812,
+          "zt_pit_ks": 0.2908083111653165,
+          "zt_interval_score_0.9": 11.079926923955242,
+          "zt_interval_score_0.95": 15.807261931947924
+        }
+      }
+    },
+    {
+      "split": 5,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.937268824149449,
+          "slope": 0.02616187812600432,
+          "train_zt_nll": 1.7188620087773057,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.937231973650881,
+          "slope": 0.026207981633211325,
+          "train_zt_nll": 1.7188614126609492,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.436191665558431,
+          "rmse": 1.9142858740017483,
+          "zt_avg_nll": 1.9529761055915456,
+          "zt_avg_crps": 1.0112340851811197,
+          "zt_pit_ks": 0.298422351099385,
+          "zt_interval_score_0.9": 10.364654226125138,
+          "zt_interval_score_0.95": 15.019978046103176
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.4221628411777134,
+          "rmse": 1.9070033183817998,
+          "zt_avg_nll": 1.9596570780796287,
+          "zt_avg_crps": 1.0064541435236005,
+          "zt_pit_ks": 0.2957804107544684,
+          "zt_interval_score_0.9": 10.833150384193194,
+          "zt_interval_score_0.95": 15.152579582875955
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.4221642540869142,
+          "rmse": 1.9070037507563535,
+          "zt_avg_nll": 1.9596515605596505,
+          "zt_avg_crps": 1.006453491218441,
+          "zt_pit_ks": 0.29577943918987565,
+          "zt_interval_score_0.9": 10.833150384193194,
+          "zt_interval_score_0.95": 15.152579582875955
+        }
+      }
+    },
+    {
+      "split": 6,
+      "n_train_products": 60,
+      "n_test_products": 40,
+      "n_population_customers": 244171,
+      "n_types": 9,
+      "fits": {
+        "empirical_persona_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.8688985660084,
+          "slope": 0.0880075103314077,
+          "train_zt_nll": 1.7599129926783932,
+          "success": true
+        },
+        "learned_type_relative_utility": {
+          "exposure_n": 250,
+          "intercept": -4.868699331879108,
+          "slope": 0.08827907968820121,
+          "train_zt_nll": 1.7598953827864532,
+          "success": true
+        }
+      },
+      "summary": {
+        "paper_llm_mix_cal": {
+          "mae": 1.390329453179598,
+          "rmse": 1.8302074005811804,
+          "zt_avg_nll": 1.9046742944400656,
+          "zt_avg_crps": 0.9706025865234807,
+          "zt_pit_ks": 0.2948592109568118,
+          "zt_interval_score_0.9": 9.479189850879145,
+          "zt_interval_score_0.95": 13.97663031382149
+        },
+        "empirical_persona_relative_utility": {
+          "mae": 1.3753427587381428,
+          "rmse": 1.8123280333846354,
+          "zt_avg_nll": 1.8920113210737997,
+          "zt_avg_crps": 0.9581386866792788,
+          "zt_pit_ks": 0.28957081518223543,
+          "zt_interval_score_0.9": 9.649677275762297,
+          "zt_interval_score_0.95": 14.139995548631195
+        },
+        "learned_type_relative_utility": {
+          "mae": 1.3754090283888414,
+          "rmse": 1.8123723020741622,
+          "zt_avg_nll": 1.8920414830125758,
+          "zt_avg_crps": 0.9581635627643001,
+          "zt_pit_ks": 0.28958323641594325,
+          "zt_interval_score_0.9": 9.649677275762297,
+          "zt_interval_score_0.95": 14.139995548631195
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Treatment-specific behavioral features remove every held-out product transaction before clustering.",
+    "Original persona-cell membership comes from the repository's precomputed full-period customer_features artifact and cannot be rebuilt leakage-free without the raw all-category H&M transactions.",
+    "Candidate price grids are historically observed and therefore transductive in both arms.",
+    "This full-scale gate reuses the authors' frozen 5,000 LLM probability responses and converts them to relative utility; it is a surrogate for fresh pairwise elicitation, not fresh GPT-5.6 pairwise calls."
+  ],
+  "interpretation_rule": "Only a passing result justifies spending fresh LLM judgments on all 100 products."
+}

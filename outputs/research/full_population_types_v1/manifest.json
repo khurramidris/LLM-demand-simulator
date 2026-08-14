@@ -1,0 +1,23 @@
+{
+  "protocol": "FULL-POPULATION-TYPES-v1",
+  "split": 0,
+  "fixed_train_products": 60,
+  "fixed_test_products": 40,
+  "strict_representation": {
+    "population": "all customers in customer_features artifact, including customers outside the paper top-50 persona cells",
+    "buyer_features": "only allowed 60-product trouser transactions",
+    "nonbuyer_features": "age only",
+    "n_types": 14,
+    "clean_claim": true
+  },
+  "rich_diagnostic_representation": {
+    "population": "same full customer population",
+    "features": "age + paper precomputed all-category txn_count/mean_price/top_product_type + allowed-trouser behavior",
+    "n_types": 16,
+    "clean_claim": false,
+    "reason": "precomputed all-category transaction features may contain held-out product contribution"
+  },
+  "primary_gate": "strict full-population fresh utility must beat previous fresh GPT-5.6 learned-type arm on held-out NLL and CRPS, with MAE/RMSE no worse than +1%",
+  "secondary_gate": "rich diagnostic beats strict on NLL or CRPS; if so, acquire raw Kaggle transactions and rebuild all-category features leakage-safely before any scientific claim",
+  "provider_blinding": "provider prompts contain no train/test labels and no sales/demand outcomes"
+}

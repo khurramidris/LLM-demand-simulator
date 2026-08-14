@@ -8,7 +8,7 @@ This experiment is deliberately narrower than the eventual Allegory test. It ask
 
 | arm | ROC AUC | Average precision | Log loss | Brier | Top-1% lift |
 |---|---:|---:|---:|---:|---:|
-| paper_bins | 0.710045 | 0.029975 | 0.067085 | 0.013030 | 3.833 |
+| paper_bins | 0.710045 | 0.029975 | 0.067085 | 0.013030 | 3.485 |
 | paper_raw | 0.645256 | 0.022099 | 0.070820 | 0.013103 | 2.290 |
 | rich_behavior | 0.692517 | 0.037960 | 0.118602 | 0.013087 | 5.078 |
 

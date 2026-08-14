@@ -1,0 +1,44 @@
+{
+  "analysis": "CONFIRMATORY-RICH-vs-PAPER-BINS",
+  "note": "Added after the preregistered paper_raw gate because paper_bins empirically proved the stronger control. Does not alter the original gate.",
+  "n_test": 301770,
+  "paper_bins": {
+    "roc_auc": 0.7100450919416134,
+    "average_precision": 0.02997515788688604,
+    "log_loss": 0.06708470894220492,
+    "brier": 0.0130301626552165,
+    "prevalence": 0.01331146237200517,
+    "precision_top_1pct": 0.04638833664678595,
+    "lift_top_1pct": 3.4848415110531734
+  },
+  "rich_behavior": {
+    "roc_auc": 0.6925171810531112,
+    "average_precision": 0.03796039490278104,
+    "log_loss": 0.11860185765806372,
+    "brier": 0.013086612375373822,
+    "prevalence": 0.01331146237200517,
+    "precision_top_1pct": 0.06759443339960239,
+    "lift_top_1pct": 5.077911916106053
+  },
+  "effect": {
+    "average_precision_absolute_delta": 0.007985237015895,
+    "average_precision_relative_delta": 0.26639516115404666,
+    "roc_auc_absolute_delta": -0.01752791088850214,
+    "log_loss_relative_delta": 0.7679417489944252,
+    "top_1pct_lift_relative_delta": 0.45714285714285713
+  },
+  "paired_bootstrap_rich_minus_paper_bins": {
+    "average_precision": {
+      "mean_delta": 0.008976713462477534,
+      "ci95_low": 0.004138080813210638,
+      "ci95_high": 0.015383218078203758,
+      "p_delta_gt_0": 1.0
+    },
+    "roc_auc": {
+      "mean_delta": -0.011084506025654917,
+      "ci95_low": -0.03210156205398257,
+      "ci95_high": 0.010754842011758725,
+      "p_delta_gt_0": 0.17
+    }
+  }
+}

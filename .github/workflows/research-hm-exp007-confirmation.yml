@@ -3,16 +3,11 @@ name: Research H&M Experiment 007 confirmation
 on:
   workflow_dispatch:
   pull_request:
-    branches: [main]
+    branches: [research/06-cold-start-population-benchmark]
     paths:
       - "scripts/research_hm_exp007_confirmation.py"
       - "research/experiments/007_expanded_cold_start_confirmation.md"
       - ".github/workflows/research-hm-exp007-confirmation.yml"
-      - "scripts/research_hm_cold_start_population.py"
-      - "scripts/research_hm_cold_start_population_runner.py"
-      - "outputs/products/txns_trousers_online.csv.zip"
-      - "outputs/personas/customer_features.csv.zip"
-      - "outputs/personas/persona_cells.csv"
 
 permissions:
   contents: read

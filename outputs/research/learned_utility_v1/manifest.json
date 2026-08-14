@@ -1,0 +1,31 @@
+{
+  "protocol": "SIMPERSONA-PAIRWISE-UTILITY-v1",
+  "cutoff": "2019-05-31",
+  "arms": [
+    "paper_probability_baseline",
+    "simple_pairwise_utility",
+    "learned_pairwise_utility"
+  ],
+  "n_simple": 10,
+  "n_learned": 9,
+  "n_offers": 15,
+  "n_pairs_per_subject": 30,
+  "selected_personas": [
+    "P017",
+    "P019",
+    "P031",
+    "P038",
+    "P039",
+    "P041",
+    "P042",
+    "P043",
+    "P045",
+    "P049"
+  ],
+  "advance_gate": "learned utility must beat paper baseline on NLL and CRPS, with MAE/RMSE no worse than +5%; simple-utility arm diagnoses elicitation vs representation effect",
+  "limitations": [
+    "original selected-cell membership comes from repository precomputed full-period features",
+    "candidate price grids are shared transductive historical grids",
+    "ChatGPT conversation judgments are not independent blinded API calls"
+  ]
+}

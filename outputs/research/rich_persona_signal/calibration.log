@@ -1,0 +1,90 @@
+{
+  "analysis": "PREREGISTERED-CALIBRATED-RICH-vs-PAPER-BINS-v1",
+  "hypothesis": "The rich representation's poor raw log loss is substantially calibration error; after fitting the same monotone logit calibrator on a validation set, rich behavior retains its AP advantage while reaching near-parity with paper bins on proper probability scores.",
+  "split": {
+    "seed": 2025,
+    "n_train": 603539,
+    "n_validation": 201180,
+    "n_test": 201180,
+    "target_prevalence_test": 0.01331146237200517
+  },
+  "results": {
+    "paper_bins": {
+      "raw": {
+        "roc_auc": 0.7083366005857359,
+        "average_precision": 0.02956686689921908,
+        "log_loss": 0.06721027927369737,
+        "brier": 0.013034536716878277,
+        "prevalence": 0.01331146237200517,
+        "precision_top_1pct": 0.04473161033797217,
+        "lift_top_1pct": 3.3603828856584173
+      },
+      "calibrated": {
+        "roc_auc": 0.7083366005857359,
+        "average_precision": 0.02956686689921908,
+        "log_loss": 0.06707450027384203,
+        "brier": 0.013030103442750901,
+        "prevalence": 0.01331146237200517,
+        "precision_top_1pct": 0.04473161033797217,
+        "lift_top_1pct": 3.3603828856584173
+      },
+      "calibration": {
+        "intercept": -0.04900839892824983,
+        "slope": 0.9527753189273808
+      }
+    },
+    "rich_behavior": {
+      "raw": {
+        "roc_auc": 0.6888203962089794,
+        "average_precision": 0.03696122976876119,
+        "log_loss": 0.13630515705061552,
+        "brier": 0.013113170206505178,
+        "prevalence": 0.01331146237200517,
+        "precision_top_1pct": 0.06510934393638171,
+        "lift_top_1pct": 4.891223978013918
+      },
+      "calibrated": {
+        "roc_auc": 0.6888203962089794,
+        "average_precision": 0.03696122976876119,
+        "log_loss": 0.0666488934639167,
+        "brier": 0.01298488903694558,
+        "prevalence": 0.01331146237200517,
+        "precision_top_1pct": 0.06510934393638171,
+        "lift_top_1pct": 4.891223978013918
+      },
+      "calibration": {
+        "intercept": -2.751130156096231,
+        "slope": 0.12559089750102262
+      }
+    }
+  },
+  "paired_bootstrap_calibrated_rich_minus_paper_bins": {
+    "average_precision": {
+      "mean_delta": 0.007952428633090746,
+      "ci95_low": 0.003229787568079657,
+      "ci95_high": 0.012658437369908189,
+      "p_delta_gt_0": 1.0
+    },
+    "roc_auc": {
+      "mean_delta": -0.0196903092401759,
+      "ci95_low": -0.045092732462543764,
+      "ci95_high": 0.00238431471383938,
+      "p_delta_gt_0": 0.04
+    }
+  },
+  "effect_calibrated": {
+    "average_precision_relative_delta": 0.2500894969611208,
+    "roc_auc_absolute_delta": -0.019516204376756496,
+    "log_loss_relative_delta": -0.0063452848427900995,
+    "brier_relative_delta": -0.0034699959216729012
+  },
+  "advance_rule": {
+    "average_precision_relative_gain_at_least": 0.1,
+    "paired_bootstrap_ap_ci95_low_above_zero": true,
+    "roc_auc_delta_at_least": -0.02,
+    "calibrated_log_loss_no_more_than_5pct_worse": true,
+    "calibrated_brier_no_more_than_2pct_worse": true
+  },
+  "decision": "ADVANCE_TO_LLM_SMOKE_TEST",
+  "scope": "Customer-level future-purchase signal gate only. It is not an aggregate-demand, counterfactual-price, or causal validation result. Rich features are trouser-history features, not a literal implementation of SimPersona/GenAgents."
+}

@@ -71,6 +71,22 @@ jobs:
             --bootstrap-n 50000 \
             2>&1 | tee outputs/research/rich_persona_signal/experiment.log
 
+      - name: Confirm rich vs original paper bins
+        id: confirmation
+        if: steps.experiment.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/compare_rich_vs_paper_bins.py \
+            --customer-features /tmp/customer_features.clean.zip \
+            --trouser-transactions /tmp/txns_trousers_online.clean.zip \
+            --product-info outputs/products/product_info_top100_online.csv \
+            --output outputs/research/rich_persona_signal/paper_bins_comparison.json \
+            --bootstrap-reps 200 \
+            --bootstrap-n 50000 \
+            2>&1 | tee outputs/research/rich_persona_signal/confirmation.log
+
       - name: Show report or failure log
         if: always()
         run: |
@@ -78,6 +94,11 @@ jobs:
             cat outputs/research/rich_persona_signal/REPORT.md
           elif [ -f outputs/research/rich_persona_signal/experiment.log ]; then
             cat outputs/research/rich_persona_signal/experiment.log
+          fi
+          if [ -f outputs/research/rich_persona_signal/paper_bins_comparison.json ]; then
+            cat outputs/research/rich_persona_signal/paper_bins_comparison.json
+          elif [ -f outputs/research/rich_persona_signal/confirmation.log ]; then
+            cat outputs/research/rich_persona_signal/confirmation.log
           fi
 
       - name: Persist experiment record to branch
@@ -99,6 +120,6 @@ jobs:
           path: outputs/research/rich_persona_signal/
           if-no-files-found: warn
 
-      - name: Fail workflow if experiment failed
-        if: steps.experiment.outcome == 'failure'
+      - name: Fail workflow if analysis failed
+        if: steps.experiment.outcome == 'failure' || steps.confirmation.outcome == 'failure'
         run: exit 1

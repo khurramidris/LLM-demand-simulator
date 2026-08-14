@@ -22,6 +22,7 @@ from demand_sim.models.emb import fit_emb
 from demand_sim.models.gaussian import fit_gaussian
 from demand_sim.models.llm_mix import fit_llm_mix
 from demand_sim.models.llm_mix_cal import fit_llm_mix_cal
+from demand_sim.models.population_cal import fit_population_cal
 from demand_sim.research import audit_alpha_table, load_probability_rows_strict, read_holdout
 
 
@@ -33,14 +34,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--responses", type=Path, required=True)
     parser.add_argument("--product-embeddings", type=Path, required=True)
     parser.add_argument("--persona-embeddings", type=Path, required=True)
+    parser.add_argument("--persona-table", type=Path, required=True)
     parser.add_argument("--train-products", type=Path, required=True)
     parser.add_argument("--test-products", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR / "fixed_holdout_evaluation")
     parser.add_argument(
         "--models",
         nargs="+",
-        default=["llm-mix", "llm-mix-cal", "emb", "gaussian"],
-        choices=["llm-mix", "llm-mix-cal", "emb", "gaussian"],
+        default=["llm-mix", "llm-mix-cal", "population-cal", "uniform-cal", "emb", "gaussian"],
+        choices=["llm-mix", "llm-mix-cal", "population-cal", "uniform-cal", "emb", "gaussian"],
     )
     parser.add_argument("--exposure-n-values", type=int, nargs="+", default=[100, 150, 200, 250])
     parser.add_argument("--fit-objective", choices=["truncated", "naive"], default="truncated")
@@ -65,6 +67,7 @@ def main() -> None:
     sales = load_sales(args.sales)
     probabilities, response_audit = load_probability_rows_strict(args.responses)
     prompting_rows, persona_ids = build_prompting_design_rows(sales, probabilities)
+    persona_table = pd.read_csv(args.persona_table)
 
     product_embeddings, product_cols = load_product_embeddings(args.product_embeddings)
     persona_embeddings, embedding_persona_ids, persona_cols = load_persona_embeddings(
@@ -99,6 +102,24 @@ def main() -> None:
             fit_objective=args.fit_objective,
             calibration_iters=args.logit_calibration_iters,
             solver=args.solver,
+        )
+    if "population-cal" in requested:
+        models["population-cal"] = fit_population_cal(
+            train_prompting,
+            persona_ids,
+            persona_table,
+            args.exposure_n_values,
+            fit_objective=args.fit_objective,
+            weight_mode="population-cal",
+        )
+    if "uniform-cal" in requested:
+        models["uniform-cal"] = fit_population_cal(
+            train_prompting,
+            persona_ids,
+            persona_table,
+            args.exposure_n_values,
+            fit_objective=args.fit_objective,
+            weight_mode="uniform-cal",
         )
     if "emb" in requested:
         models["emb"] = fit_emb(
@@ -187,6 +208,7 @@ def main() -> None:
             "responses": str(args.responses),
             "product_embeddings": str(args.product_embeddings),
             "persona_embeddings": str(args.persona_embeddings),
+            "persona_table": str(args.persona_table),
             "train_products": str(args.train_products),
             "test_products": str(args.test_products),
         },

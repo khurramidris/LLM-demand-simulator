@@ -33,6 +33,30 @@ jobs:
           unzip -l outputs/personas/customer_features.csv.zip | head -20
           unzip -l outputs/products/txns_trousers_online.csv.zip | head -20
 
+      - name: Sanitize ZIP archives
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZIP_DEFLATED, ZipFile
+
+          pairs = [
+              (Path('outputs/personas/customer_features.csv.zip'), Path('/tmp/customer_features.clean.zip')),
+              (Path('outputs/products/txns_trousers_online.csv.zip'), Path('/tmp/txns_trousers_online.clean.zip')),
+          ]
+          for source, target in pairs:
+              with ZipFile(source) as zin:
+                  members = [
+                      name for name in zin.namelist()
+                      if name.lower().endswith('.csv') and not name.startswith('__MACOSX/') and '/._' not in name
+                  ]
+                  if len(members) != 1:
+                      raise RuntimeError(f'{source}: expected one real CSV member, found {members}')
+                  payload = zin.read(members[0])
+              with ZipFile(target, 'w', compression=ZIP_DEFLATED) as zout:
+                  zout.writestr(Path(members[0]).name, payload)
+              print(source, '->', target, 'member=', members[0], 'bytes=', len(payload))
+          PY
+
       - name: Run representation signal gate
         id: experiment
         continue-on-error: true
@@ -41,6 +65,8 @@ jobs:
           set -o pipefail
           mkdir -p outputs/research/rich_persona_signal
           python scripts/experiment_rich_persona_signal.py \
+            --customer-features /tmp/customer_features.clean.zip \
+            --trouser-transactions /tmp/txns_trousers_online.clean.zip \
             --bootstrap-reps 100 \
             --bootstrap-n 50000 \
             2>&1 | tee outputs/research/rich_persona_signal/experiment.log

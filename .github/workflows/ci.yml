@@ -1,0 +1,26 @@
+name: research-ci
+
+on:
+  push:
+    branches: [main, "research/**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install lightweight test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy pandas scipy cvxpy pytest ruff
+      - name: Compile Python sources
+        run: python -m compileall -q demand_sim scripts tests
+      - name: Lint for correctness errors
+        run: ruff check demand_sim scripts tests --select E9,F63,F7,F82
+      - name: Run tests
+        run: pytest

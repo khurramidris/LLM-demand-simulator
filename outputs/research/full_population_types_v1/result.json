@@ -1,0 +1,410 @@
+{
+  "protocol": "FULL-POPULATION-TYPES-v1",
+  "decision": "PROMISING_BUT_NOT_PROVEN",
+  "preregistered_gate_passed": true,
+  "representation_isolation_gate_passed": false,
+  "rich_diagnostic_signal": true,
+  "summary": {
+    "control9_common_provider": {
+      "mae": 1.3234993630810254,
+      "rmse": 1.7053376451551059,
+      "zt_avg_nll": 1.7724275969748564,
+      "zt_avg_crps": 0.9018310018959343,
+      "zt_pit_ks": 0.2888512932085998,
+      "zt_interval_score_0.9": 8.722982936591531,
+      "zt_interval_score_0.95": 12.283126184958913
+    },
+    "strict_full_population_common_provider": {
+      "mae": 1.3253311390724587,
+      "rmse": 1.7062774698241283,
+      "zt_avg_nll": 1.7718437890661751,
+      "zt_avg_crps": 0.9022941352433115,
+      "zt_pit_ks": 0.28837168734818314,
+      "zt_interval_score_0.9": 8.592163471666316,
+      "zt_interval_score_0.95": 12.283126184958913
+    },
+    "rich_diagnostic_common_provider": {
+      "mae": 1.3233908069123996,
+      "rmse": 1.705409529030832,
+      "zt_avg_nll": 1.7722154043636915,
+      "zt_avg_crps": 0.9017721438803455,
+      "zt_pit_ks": 0.2884407550013306,
+      "zt_interval_score_0.9": 8.654307983989888,
+      "zt_interval_score_0.95": 12.283126184958913
+    },
+    "paper_llm_mix_cal": {
+      "mae": 1.3529455874757736,
+      "rmse": 1.7285789164833791,
+      "zt_avg_nll": 1.7799559361273736,
+      "zt_avg_crps": 0.9168211594164736,
+      "zt_pit_ks": 0.2942716575670137,
+      "zt_interval_score_0.9": 8.402359384874657,
+      "zt_interval_score_0.95": 12.183905624605003
+    },
+    "previous_fresh_gpt56_9type": {
+      "mae": 1.3282012402745298,
+      "rmse": 1.7071108507548496,
+      "zt_avg_nll": 1.7724390784054278,
+      "zt_avg_crps": 0.9028253419001474,
+      "zt_pit_ks": 0.2894822151148417,
+      "zt_interval_score_0.9": 8.870233831893827,
+      "zt_interval_score_0.95": 12.283126184958913
+    }
+  },
+  "fits": {
+    "control9_common_provider": {
+      "exposure_n": 250,
+      "intercept": -4.8862893954322235,
+      "slope": 0.026472721700196652,
+      "train_zt_nll": 1.838224977493522,
+      "success": true
+    },
+    "strict_full_population_common_provider": {
+      "exposure_n": 250,
+      "intercept": -4.8786981116072665,
+      "slope": 0.03348855059063464,
+      "train_zt_nll": 1.8380313274590687,
+      "success": true
+    },
+    "rich_diagnostic_common_provider": {
+      "exposure_n": 250,
+      "intercept": -4.88389197882859,
+      "slope": 0.03135595618553513,
+      "train_zt_nll": 1.8380976168586938,
+      "success": true
+    }
+  },
+  "effects": {
+    "strict_vs_control9": {
+      "zt_avg_nll": {
+        "absolute": -0.0005838079086812886,
+        "relative": -0.00032938321975900184
+      },
+      "zt_avg_crps": {
+        "absolute": 0.0004631333473771315,
+        "relative": 0.0005135478226003303
+      },
+      "mae": {
+        "absolute": 0.0018317759914332488,
+        "relative": 0.0013840399493423151
+      },
+      "rmse": {
+        "absolute": 0.0009398246690224266,
+        "relative": 0.0005511076775279576
+      }
+    },
+    "strict_vs_previous_fresh": {
+      "zt_avg_nll": {
+        "absolute": -0.0005952893392526803,
+        "relative": -0.0003358588436157882
+      },
+      "zt_avg_crps": {
+        "absolute": -0.0005312066568359253,
+        "relative": -0.0005883825278075511
+      },
+      "mae": {
+        "absolute": -0.002870101202071096,
+        "relative": -0.0021608933308011865
+      },
+      "rmse": {
+        "absolute": -0.0008333809307212725,
+        "relative": -0.0004881820828171577
+      }
+    },
+    "strict_vs_paper": {
+      "zt_avg_nll": {
+        "absolute": -0.00811214706119845,
+        "relative": -0.0045574988102502914
+      },
+      "zt_avg_crps": {
+        "absolute": -0.014527024173162095,
+        "relative": -0.015844992258259034
+      },
+      "mae": {
+        "absolute": -0.02761444840331495,
+        "relative": -0.020410612709736507
+      },
+      "rmse": {
+        "absolute": -0.022301446659250823,
+        "relative": -0.012901607468764507
+      }
+    },
+    "rich_vs_strict": {
+      "zt_avg_nll": {
+        "absolute": 0.0003716152975163922,
+        "relative": 0.00020973366828926082
+      },
+      "zt_avg_crps": {
+        "absolute": -0.0005219913629659345,
+        "relative": -0.0005785157440097679
+      },
+      "mae": {
+        "absolute": -0.0019403321600590662,
+        "relative": -0.001464035743864752
+      },
+      "rmse": {
+        "absolute": -0.000867940793296329,
+        "relative": -0.0005086750593886647
+      }
+    }
+  },
+  "bootstrap": {
+    "strict_vs_control9": {
+      "zt_avg_nll": {
+        "b_minus_a_boot_mean": -0.0006055613245441468,
+        "ci95_low": -0.003185745324694415,
+        "ci95_high": 0.0014538652181009541,
+        "p_b_better": 0.67445
+      },
+      "zt_avg_crps": {
+        "b_minus_a_boot_mean": 0.00045679314216950706,
+        "ci95_low": -0.0008102661092516443,
+        "ci95_high": 0.0016173969840829112,
+        "p_b_better": 0.2255
+      },
+      "mae": {
+        "b_minus_a_boot_mean": 0.0018084340494514458,
+        "ci95_low": -0.0009876728972602956,
+        "ci95_high": 0.004413439072031579,
+        "p_b_better": 0.09645
+      }
+    },
+    "strict_vs_paper": {
+      "zt_avg_nll": {
+        "b_minus_a_boot_mean": -0.007871395777292749,
+        "ci95_low": -0.028946955382475603,
+        "ci95_high": 0.0156429837042961,
+        "p_b_better": 0.7644
+      },
+      "zt_avg_crps": {
+        "b_minus_a_boot_mean": -0.014405438070399328,
+        "ci95_low": -0.027726447294941316,
+        "ci95_high": -0.0020704685916565525,
+        "p_b_better": 0.98895
+      },
+      "mae": {
+        "b_minus_a_boot_mean": -0.027493226869524302,
+        "ci95_low": -0.051924129272380284,
+        "ci95_high": -0.005581201621312996,
+        "p_b_better": 0.99465
+      }
+    },
+    "rich_vs_strict": {
+      "zt_avg_nll": {
+        "b_minus_a_boot_mean": 0.00039454062374384664,
+        "ci95_low": -0.0012789761815936145,
+        "ci95_high": 0.0022506003163339445,
+        "p_b_better": 0.3405
+      },
+      "zt_avg_crps": {
+        "b_minus_a_boot_mean": -0.0005158993906124945,
+        "ci95_low": -0.0015637760328081885,
+        "ci95_high": 0.0005493288655605183,
+        "p_b_better": 0.82945
+      },
+      "mae": {
+        "b_minus_a_boot_mean": -0.0019239754946553177,
+        "ci95_low": -0.004283316757796041,
+        "ci95_high": 0.0005044633672370086,
+        "p_b_better": 0.9425
+      }
+    }
+  },
+  "signal_audit": {
+    "control9_common_provider": {
+      "n_types": 9,
+      "weights": [
+        0.9128356766364562,
+        0.07498023925855245,
+        0.0016791510867383008,
+        0.002047745227729701,
+        0.0008109071101809005,
+        0.0023344295596119014,
+        0.0019125940426995012,
+        0.0012777930221033007,
+        0.0021214640559280014
+      ],
+      "train_utility_mean": [
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.5822635135135,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862
+      ],
+      "train_utility_sd": [
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.409587072717814,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626
+      ]
+    },
+    "strict_full_population_common_provider": {
+      "n_types": 14,
+      "weights": [
+        0.011640111371885807,
+        0.0006589017332614003,
+        0.023320310791702513,
+        0.0007733348882636005,
+        0.0005758101430050004,
+        0.0007427221971165004,
+        0.0008622574673100004,
+        0.0004045248473009002,
+        0.2524759836149217,
+        0.27548870974795564,
+        0.11814312161984868,
+        0.1759019810784414,
+        0.12771979183370027,
+        0.011292438665286607
+      ],
+      "train_utility_mean": [
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.68146114864862,
+        72.37542229729726,
+        67.11862331081078,
+        67.17360641891895,
+        64.91731418918921,
+        60.819805743243265,
+        59.08500844594595,
+        64.91731418918921
+      ],
+      "train_utility_sd": [
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.6851482338626,
+        14.092481996020132,
+        15.192537391881348,
+        14.086661065531521,
+        13.330225094252812,
+        12.418629464428195,
+        12.527852885896763,
+        13.330225094252812
+      ]
+    },
+    "rich_diagnostic_common_provider": {
+      "n_types": 16,
+      "weights": [
+        0.1714150352045949,
+        0.03824472659951312,
+        0.10285937112785906,
+        0.04921281651336023,
+        0.059641539964139435,
+        0.08533360544614355,
+        0.02039096779836441,
+        0.03453913322351632,
+        0.045927783203836725,
+        0.07559658304056914,
+        0.09541684281111976,
+        0.04526742372337783,
+        0.06279902039388334,
+        0.048151576553594026,
+        0.025332730797825016,
+        0.03987084359830312
+      ],
+      "train_utility_mean": [
+        67.11862331081078,
+        78.50333614864863,
+        80.1742398648649,
+        71.89814189189187,
+        79.03834459459453,
+        76.09991554054056,
+        73.0824324324324,
+        76.55261824324327,
+        78.29324324324325,
+        77.95202702702704,
+        62.400886824324346,
+        73.6119087837837,
+        74.71570945945946,
+        76.55261824324327,
+        77.21140202702708,
+        76.55261824324327
+      ],
+      "train_utility_sd": [
+        15.192537391881348,
+        16.23963654129682,
+        16.75552486827505,
+        13.7043513973887,
+        16.628670798650838,
+        15.252949321348419,
+        13.55548356289118,
+        15.988380443062375,
+        16.688423654616635,
+        16.81462960829452,
+        12.612398016048804,
+        14.670100737455247,
+        14.590337550396328,
+        15.988380443062375,
+        16.5157326273088,
+        15.988380443062375
+      ]
+    }
+  },
+  "provider_provenance": {
+    "provider": "GPT-5.6 Sol in-conversation semantic judgments encoded as a deterministic common scoring policy",
+    "frozen_before_evaluation": true,
+    "reads_sales_or_demand": false,
+    "reads_train_test_labels": false,
+    "catalog_products": 100,
+    "panels": {
+      "control9": {
+        "n_types": 9,
+        "weight_sum": 0.9999999999999994
+      },
+      "strict_full_population": {
+        "n_types": 14,
+        "weight_sum": 0.9999999999999994
+      },
+      "rich_diagnostic": {
+        "n_types": 16,
+        "weight_sum": 0.9999999999999994
+      }
+    },
+    "purpose": "Hold provider logic fixed while changing population representation.",
+    "limitations": [
+      "This is not a set of independent external API calls.",
+      "The semantic scoring policy is hand-specified by the model from type evidence and product descriptions.",
+      "The rich diagnostic type evidence includes the paper precomputed all-category features and is not strict holdout-clean."
+    ]
+  },
+  "manifest": {
+    "protocol": "FULL-POPULATION-TYPES-v1",
+    "split": 0,
+    "fixed_train_products": 60,
+    "fixed_test_products": 40,
+    "strict_representation": {
+      "population": "all customers in customer_features artifact, including customers outside the paper top-50 persona cells",
+      "buyer_features": "only allowed 60-product trouser transactions",
+      "nonbuyer_features": "age only",
+      "n_types": 14,
+      "clean_claim": true
+    },
+    "rich_diagnostic_representation": {
+      "population": "same full customer population",
+      "features": "age + paper precomputed all-category txn_count/mean_price/top_product_type + allowed-trouser behavior",
+      "n_types": 16,
+      "clean_claim": false,
+      "reason": "precomputed all-category transaction features may contain held-out product contribution"
+    },
+    "primary_gate": "strict full-population fresh utility must beat previous fresh GPT-5.6 learned-type arm on held-out NLL and CRPS, with MAE/RMSE no worse than +1%",
+    "secondary_gate": "rich diagnostic beats strict on NLL or CRPS; if so, acquire raw Kaggle transactions and rebuild all-category features leakage-safely before any scientific claim",
+    "provider_blinding": "provider prompts contain no train/test labels and no sales/demand outcomes"
+  },
+  "interpretation_rule": "The strict arm can support a clean representation claim. The rich diagnostic cannot support a scientific holdout claim until all-category features are rebuilt from raw transactions with held-out products removed."
+}

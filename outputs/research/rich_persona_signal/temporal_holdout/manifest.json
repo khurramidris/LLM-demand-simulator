@@ -1,0 +1,25 @@
+{
+  "protocol": "GPT56-TEMPORAL-HOLDOUT-v1",
+  "history_start": "2018-09-01",
+  "behavior_cutoff": "2019-05-31",
+  "calibration_period": "<= 2019-05-31",
+  "heldout_period": "> 2019-05-31 through 2019-09-19",
+  "n_personas": 10,
+  "n_products": 5,
+  "logical_calls_per_arm": 50,
+  "primary_metrics": [
+    "zero_truncated_nll",
+    "zero_truncated_crps"
+  ],
+  "secondary_metrics": [
+    "mae",
+    "rmse"
+  ],
+  "advance_rule": "rich improves both primary metrics and neither MAE nor RMSE worsens by more than 5%",
+  "shared_limitations": [
+    "Original persona-cell memberships come from the repository's precomputed full-period customer features and therefore are not temporally rebuilt.",
+    "Candidate price grids are the repository's original historically observed grids and are transductive.",
+    "Both limitations are identical across control and treatment; only added trouser-history context is cutoff-safe.",
+    "ChatGPT-in-conversation responses are not independent blinded API calls."
+  ]
+}

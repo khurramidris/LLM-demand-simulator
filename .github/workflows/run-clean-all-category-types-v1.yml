@@ -1,0 +1,41 @@
+name: run-clean-all-category-types-v1
+on:
+  push:
+    branches: [research/clean-all-category-types-v1]
+    paths:
+      - 'scripts/run_clean_all_category_types_v1.py'
+      - '.github/workflows/run-clean-all-category-types-v1.yml'
+  workflow_dispatch:
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      PYTHONPATH: .
+      HF_HUB_DISABLE_PROGRESS_BARS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install research dependencies
+        run: pip install numpy pandas scipy scikit-learn duckdb pyarrow huggingface_hub hf_xet
+      - name: Run leakage-safe all-category experiment
+        run: python scripts/run_clean_all_category_types_v1.py
+      - name: Show report
+        run: cat outputs/research/clean_all_category_types_v1/REPORT.md
+      - name: Persist compact research artifacts
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add outputs/research/clean_all_category_types_v1/manifest.json \
+                  outputs/research/clean_all_category_types_v1/result.json \
+                  outputs/research/clean_all_category_types_v1/REPORT.md \
+                  outputs/research/clean_all_category_types_v1/global_style_prior.json \
+                  outputs/research/clean_all_category_types_v1/clean_rich_types.csv \
+                  outputs/research/clean_all_category_types_v1/clean_coarse_types.csv \
+                  outputs/research/clean_all_category_types_v1/pair_scores_*.csv
+          git diff --cached --quiet || git commit -m 'Record clean all-category representation result'
+          git push

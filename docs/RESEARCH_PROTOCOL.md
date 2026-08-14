@@ -29,6 +29,12 @@ The strict protocol fixes the product split before customer-state construction.
 7. Evaluate once on the untouched test products.
 8. Record parse validity, price-monotonicity violations, mixture concentration, calibration parameters, and all predictive metrics.
 
+### Scope of the strictness
+
+This protocol specifically removes **test-product leakage into customer/persona state**. It intentionally keeps the same fixed 100-product universe and observed candidate price grids as the paper so the comparison changes one variable at a time.
+
+Therefore it should not be described as a completely outcome-blind or causal benchmark. Product-universe selection and the observed price support still originate from the H&M observational data. A later, stronger benchmark can freeze the universe and admissible price grid using only pre-period information.
+
 Build the leakage-safe state and query plan:
 
 ```bash
@@ -45,7 +51,14 @@ OPENAI_API_KEY=... python scripts/run_llm_simulations.py \
   --output outputs/strict_global_holdout/responses/llm_responses.csv
 ```
 
-Build product and strict-persona embeddings using the existing embedding scripts, pointing the persona embedding script at the strict persona table.
+Build product embeddings with the existing product embedding workflow. Build strict persona embeddings from the leakage-safe persona cells:
+
+```bash
+python scripts/build_persona_embeddings.py \
+  --personas outputs/strict_global_holdout/personas/persona_cells.csv \
+  --output-dir outputs/strict_global_holdout/embeddings \
+  --allow-download
+```
 
 Evaluate the fixed holdout:
 

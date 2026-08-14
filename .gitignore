@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+.env.*
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Local H&M / Kaggle data
+/data/
+/images/
+
+# Generated research outputs
+/outputs/strict_global_holdout/
+/outputs/fixed_holdout_evaluation/
+
+# Model caches
+.cache/

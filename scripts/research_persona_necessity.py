@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 from scipy.special import expit
+from scipy.stats import t as student_t
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -68,7 +69,11 @@ def score(demand: np.ndarray, q: np.ndarray, exposure_n: int) -> dict[str, float
     return {
         "avg_zt_nll": float(nll),
         "mae": float(np.mean(np.abs(err))),
-        "rmse": float(np.sqrt(np.mean(err**2))),
+        # This is a direct row-level RMSE diagnostic. The paper repository's official
+        # RMSE is computed at pair level and then aggregated, so the two must not be
+        # compared numerically. NLL and MAE aggregate linearly and reproduce the
+        # committed control metrics exactly.
+        "row_rmse": float(np.sqrt(np.mean(err**2))),
         "mean_q": float(np.mean(q)),
     }
 
@@ -125,7 +130,10 @@ def optimize_treatment(
             bounds=bounds,
             options={"maxiter": 250, "ftol": 1e-10},
         )
-        candidates = [(start, objective(start), True, "initial"), (result.x, float(result.fun), bool(result.success), str(result.message))]
+        candidates = [
+            (start, objective(start), True, "initial"),
+            (result.x, float(result.fun), bool(result.success), str(result.message)),
+        ]
         for params, value, success, message in candidates:
             if np.isfinite(value) and (best is None or value < best[1]):
                 best = (np.asarray(params, dtype=float), float(value), success, message)
@@ -158,6 +166,40 @@ def fitted_alpha_diagnostics(model) -> dict[str, float]:
         "control_n_personas_ge_1pct": int(np.sum(w >= 0.01)),
         "control_largest_persona_weight": float(w.max()),
     }
+
+
+def paired_uncertainty(compared: pd.DataFrame) -> pd.DataFrame:
+    records: list[dict] = []
+    for (sample, model), group in compared.groupby(["sample", "model"], sort=True):
+        if model == "control_free_50_persona":
+            continue
+        for metric, delta_col in [
+            ("avg_zt_nll", "nll_delta_vs_control"),
+            ("mae", "mae_delta_vs_control"),
+            ("row_rmse", "row_rmse_delta_vs_control"),
+        ]:
+            values = group[delta_col].dropna().to_numpy(float)
+            n = len(values)
+            mean = float(np.mean(values)) if n else np.nan
+            std = float(np.std(values, ddof=1)) if n > 1 else 0.0
+            se = float(std / np.sqrt(n)) if n else np.nan
+            critical = float(student_t.ppf(0.975, n - 1)) if n > 1 else 0.0
+            halfwidth = critical * se if n > 1 else 0.0
+            records.append(
+                {
+                    "sample": sample,
+                    "model": model,
+                    "metric": metric,
+                    "n_splits": n,
+                    "mean_delta_vs_control": mean,
+                    "std_delta": std,
+                    "se_delta": se,
+                    "ci95_low": mean - halfwidth,
+                    "ci95_high": mean + halfwidth,
+                    "fraction_splits_better_than_control": float(np.mean(values < 0)) if n else np.nan,
+                }
+            )
+    return pd.DataFrame(records)
 
 
 def main() -> None:
@@ -265,18 +307,18 @@ def main() -> None:
     fits.to_csv(args.output_dir / "persona_necessity_fits.csv", index=False)
 
     control = scores[scores["model"] == "control_free_50_persona"][
-        ["split", "sample", "avg_zt_nll", "mae", "rmse"]
+        ["split", "sample", "avg_zt_nll", "mae", "row_rmse"]
     ].rename(
         columns={
             "avg_zt_nll": "control_avg_zt_nll",
             "mae": "control_mae",
-            "rmse": "control_rmse",
+            "row_rmse": "control_row_rmse",
         }
     )
     compared = scores.merge(control, on=["split", "sample"], how="left")
     compared["nll_delta_vs_control"] = compared["avg_zt_nll"] - compared["control_avg_zt_nll"]
     compared["mae_delta_vs_control"] = compared["mae"] - compared["control_mae"]
-    compared["rmse_delta_vs_control"] = compared["rmse"] - compared["control_rmse"]
+    compared["row_rmse_delta_vs_control"] = compared["row_rmse"] - compared["control_row_rmse"]
     compared.to_csv(args.output_dir / "persona_necessity_scores_with_control_delta.csv", index=False)
 
     summary = (
@@ -286,12 +328,15 @@ def main() -> None:
             mean_nll_delta_vs_control=("nll_delta_vs_control", "mean"),
             mean_mae=("mae", "mean"),
             mean_mae_delta_vs_control=("mae_delta_vs_control", "mean"),
-            mean_rmse=("rmse", "mean"),
-            mean_rmse_delta_vs_control=("rmse_delta_vs_control", "mean"),
+            mean_row_rmse=("row_rmse", "mean"),
+            mean_row_rmse_delta_vs_control=("row_rmse_delta_vs_control", "mean"),
             n_splits=("split", "nunique"),
         )
     )
     summary.to_csv(args.output_dir / "persona_necessity_summary.csv", index=False)
+
+    uncertainty = paired_uncertainty(compared)
+    uncertainty.to_csv(args.output_dir / "persona_necessity_paired_uncertainty.csv", index=False)
 
     test = summary[summary["sample"] == "test"].copy()
     ctl = float(test.loc[test["model"] == "control_free_50_persona", "mean_avg_zt_nll"].iloc[0])
@@ -300,10 +345,18 @@ def main() -> None:
         row = test[test["model"] == treatment].iloc[0]
         gap = float(row["mean_avg_zt_nll"] - ctl)
         rel_gap_pct = 100.0 * gap / ctl
+        nll_ci = uncertainty[
+            (uncertainty["sample"] == "test")
+            & (uncertainty["model"] == treatment)
+            & (uncertainty["metric"] == "avg_zt_nll")
+        ].iloc[0]
         decisions[treatment] = {
             "test_mean_avg_zt_nll": float(row["mean_avg_zt_nll"]),
             "absolute_nll_gap_vs_control": gap,
             "relative_nll_gap_pct_vs_control": rel_gap_pct,
+            "paired_nll_ci95_low": float(nll_ci["ci95_low"]),
+            "paired_nll_ci95_high": float(nll_ci["ci95_high"]),
+            "fraction_splits_better_than_control": float(nll_ci["fraction_splits_better_than_control"]),
         }
 
     control_test_rows = compared[(compared["sample"] == "test") & (compared["model"] == "control_free_50_persona")]
@@ -323,12 +376,16 @@ def main() -> None:
         ),
         "warning": (
             "This experiment fixes N to the saved control value so population aggregation is the major changed variable. "
-            "It tests fixed population aggregation with fresh calibration; it is not yet a full K-persona refit ladder."
+            "It tests fixed population aggregation with fresh calibration; it is not yet a full K-persona refit ladder. "
+            "row_rmse is a row-level diagnostic and is not the repository's official pair-aggregated RMSE."
         ),
     }
     (args.output_dir / "persona_necessity_decision.json").write_text(json.dumps(decision, indent=2))
 
     print(summary.to_string(index=False))
+    print("\nPaired uncertainty:\n")
+    print(uncertainty.to_string(index=False))
+    print("\nDecision:\n")
     print(json.dumps(decision, indent=2))
 
 

@@ -1,0 +1,54 @@
+name: research-gpt56-persona-richness-evaluate
+
+on:
+  push:
+    branches:
+      - research/04-gpt56-persona-richness
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pandas numpy scipy
+      - name: Regenerate target-blind inputs
+        run: python scripts/research_prepare_gpt56_blinded_inputs.py --output-dir /tmp/exp004_blinded
+      - name: Regenerate frozen GPT-5.6 authored latent scores
+        run: |
+          python scripts/research_generate_gpt56_frozen_scores.py \
+            --products /tmp/exp004_blinded/blinded_products.csv \
+            --paper-personas /tmp/exp004_blinded/paper_personas_top50.csv \
+            --matched-states /tmp/exp004_blinded/matched_customer_states.csv \
+            --output /tmp/exp004_frozen_latents.csv
+      - name: Verify pre-unblinding SHA-256 commitment
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          commitment = json.loads(Path('research/experiments/004_frozen_score_commitment.json').read_text())
+          actual = hashlib.sha256(Path('/tmp/exp004_frozen_latents.csv').read_bytes()).hexdigest()
+          expected = commitment['frozen_csv_sha256']
+          print('expected:', expected)
+          print('actual:  ', actual)
+          assert actual == expected, 'Frozen score digest mismatch: abort before outcome evaluation'
+          PY
+      - name: Evaluate frozen scores on historical heldout outcomes
+        run: |
+          python scripts/research_evaluate_gpt56_persona_richness.py \
+            --latents /tmp/exp004_frozen_latents.csv \
+            --output-dir /tmp/exp004_results
+      - name: Preserve frozen latents with result artifact
+        run: cp /tmp/exp004_frozen_latents.csv /tmp/exp004_results/frozen_latents.csv
+      - name: Upload Experiment 004 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp004-gpt56-persona-richness-results
+          path: /tmp/exp004_results
+          if-no-files-found: error
+          retention-days: 30

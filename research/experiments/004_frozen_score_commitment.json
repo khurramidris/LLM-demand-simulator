@@ -1,0 +1,23 @@
+{
+  "experiment": "004_gpt56_persona_richness",
+  "frozen_before_outcome_evaluation": true,
+  "scorer": "GPT-5.6 Sol-authored deterministic semantic/customer scorer",
+  "generator": "scripts/research_generate_gpt56_frozen_scores.py",
+  "target_blind_input_seed": 20260814,
+  "n_articles": 100,
+  "n_arms": 4,
+  "n_latent_rows": 400,
+  "arms": ["G", "P", "C", "R"],
+  "csv_float_format": "%.12g",
+  "frozen_csv_sha256": "0d5a5ce41db0a546f8a535e0c21df6519a08df1ad0558c92e29299beaea72a73",
+  "contains_demand_targets": false,
+  "pre_unblinding_diagnostics": {
+    "rich_coarse_appeal_correlation": 0.994698,
+    "rich_coarse_appeal_mean_absolute_difference": 0.5908450661,
+    "rich_coarse_appeal_max_absolute_difference": 1.04456319,
+    "generic_coarse_appeal_correlation": 0.886598,
+    "paper_coarse_appeal_correlation": 0.987020,
+    "paper_rich_appeal_correlation": 0.970569
+  },
+  "note": "The SHA-256 commitment, generator implementation, scoring protocol, and target-blind preparation code were committed before the Experiment 004 evaluator was allowed to read row-level demand. Evaluation must regenerate the latent CSV and abort if this digest does not match."
+}

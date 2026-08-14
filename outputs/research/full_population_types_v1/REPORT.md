@@ -3,7 +3,7 @@
 **Decision:** PROMISING_BUT_NOT_PROVEN
 
 Pre-registered strict-vs-previous gate: **True**  
-Same-provider representation gate: **{representation_gate}**  
+Same-provider representation gate: **False**  
 Rich diagnostic signal (non-claimable): **True**
 
 | model | NLL | CRPS | MAE | RMSE |
@@ -21,11 +21,13 @@ Rich diagnostic signal (non-claimable): **True**
 - zt_avg_crps: +0.051%
 - mae: +0.138%
 - rmse: +0.055%
+
 ### strict_vs_previous_fresh
 - zt_avg_nll: -0.034%
 - zt_avg_crps: -0.059%
 - mae: -0.216%
 - rmse: -0.049%
+
 ### strict_vs_paper
 - zt_avg_nll: -0.456%
 - zt_avg_crps: -1.584%

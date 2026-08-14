@@ -18,7 +18,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-import scripts.research_hm_behavioral_benchmark as base
+# Running this file directly puts scripts/ on sys.path, so import the sibling module directly.
+import research_hm_behavioral_benchmark as base
 
 
 def leakage_clean_fit_incidence_models(panel, rule):

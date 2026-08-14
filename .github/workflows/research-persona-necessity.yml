@@ -30,7 +30,8 @@ jobs:
             numpy==2.2.6 \
             pandas==2.2.3 \
             scipy==1.15.3 \
-            cvxpy==1.6.5
+            cvxpy==1.6.5 \
+            tqdm==4.67.1
 
       - name: Verify committed baseline artifact
         run: |

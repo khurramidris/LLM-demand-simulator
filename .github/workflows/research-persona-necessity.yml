@@ -53,6 +53,9 @@ jobs:
           if [ -f outputs/research/persona_necessity/persona_necessity_summary.csv ]; then
             cat outputs/research/persona_necessity/persona_necessity_summary.csv
           fi
+          if [ -f outputs/research/persona_necessity/persona_necessity_paired_uncertainty.csv ]; then
+            cat outputs/research/persona_necessity/persona_necessity_paired_uncertainty.csv
+          fi
           if [ -f outputs/research/persona_necessity/persona_necessity_decision.json ]; then
             cat outputs/research/persona_necessity/persona_necessity_decision.json
           fi

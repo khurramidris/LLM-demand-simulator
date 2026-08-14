@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -31,7 +32,6 @@ def allocate_largest_remainder(counts: pd.Series, n: int) -> pd.Series:
     if remaining > 0:
         order = (raw - base).sort_values(ascending=False, kind="mergesort").index[:remaining]
         base.loc[order] += 1
-    # Never allocate more samples than records in a stratum. Redistribute any excess.
     excess = int((base - counts).clip(lower=0).sum())
     base = pd.concat([base, counts], axis=1).min(axis=1).astype(int)
     while excess > 0:
@@ -39,7 +39,6 @@ def allocate_largest_remainder(counts: pd.Series, n: int) -> pd.Series:
         eligible = room[room > 0]
         if eligible.empty:
             break
-        # deterministic: largest proportional under-allocation first, then lexical stratum key
         desirability = (raw - base).loc[eligible.index]
         idx = desirability.sort_values(ascending=False, kind="mergesort").index[0]
         base.loc[idx] += 1
@@ -68,8 +67,19 @@ def rich_text(row: pd.Series) -> str:
     )
 
 
+def read_customer_features(path: Path) -> pd.DataFrame:
+    if path.suffix.lower() != ".zip":
+        return pd.read_csv(path)
+    with zipfile.ZipFile(path) as zf:
+        members = [name for name in zf.namelist() if not name.startswith("__MACOSX/") and name.endswith("customer_features.csv")]
+        if len(members) != 1:
+            raise ValueError(f"Expected exactly one customer_features.csv member, found: {members}")
+        with zf.open(members[0]) as handle:
+            return pd.read_csv(handle)
+
+
 def build_matched_states(customer_features_path: Path, n: int = 50) -> pd.DataFrame:
-    df = pd.read_csv(customer_features_path, compression="infer")
+    df = read_customer_features(customer_features_path)
     required = {"customer_id", "age", "txn_count", "mean_price", "top_product_type"}
     missing = required - set(df.columns)
     if missing:
@@ -90,8 +100,7 @@ def build_matched_states(customer_features_path: Path, n: int = 50) -> pd.DataFr
     df = df[df.engagement_bin.notna() & df.price_tier.notna()].copy()
 
     strata_cols = ["age_bin", "engagement_bin", "price_tier"]
-    key = df[strata_cols].astype(str).agg("|".join, axis=1)
-    df["stratum"] = key
+    df["stratum"] = df[strata_cols].astype(str).agg("|".join, axis=1)
     counts = df.groupby("stratum", observed=True).size().sort_index()
     alloc = allocate_largest_remainder(counts, n)
 
@@ -107,7 +116,6 @@ def build_matched_states(customer_features_path: Path, n: int = 50) -> pd.DataFr
     sample = pd.concat(chosen, ignore_index=True)
     assert len(sample) == n
 
-    # Stable order independent of raw customer ID presentation.
     sample["customer_hash"] = sample.customer_id.astype(str).map(hashed_id)
     sample = sample.sort_values(["stratum", "customer_hash"], kind="mergesort").reset_index(drop=True)
     sample["state_id"] = [f"C{i+1:03d}" for i in range(len(sample))]
@@ -124,7 +132,6 @@ def build_matched_states(customer_features_path: Path, n: int = 50) -> pd.DataFr
 
 def build_products(product_info_path: Path, query_plan_path: Path) -> pd.DataFrame:
     products = pd.read_csv(product_info_path)
-    # The query-plan artifact contains prompts and price grids but no demand targets.
     plan = pd.read_csv(query_plan_path, usecols=["article_id", "prices_json"])
     grids = plan.drop_duplicates("article_id").copy()
     if grids.article_id.duplicated().any():
@@ -161,7 +168,6 @@ def main() -> None:
     ]
     paper = paper[paper_cols]
 
-    # Security/scientific assertion: no target-like columns can leave this script.
     banned = {"demand", "sales", "target", "y", "total_demand", "popularity"}
     for name, frame in {"products": products, "matched": matched, "paper": paper}.items():
         overlap = banned.intersection(map(str.lower, frame.columns))

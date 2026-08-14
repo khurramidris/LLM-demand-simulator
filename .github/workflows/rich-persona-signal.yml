@@ -23,82 +23,50 @@ jobs:
       - name: Install experiment dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install numpy pandas scikit-learn
-
-      - name: Verify committed research data
-        run: |
-          ls -lh outputs/personas/customer_features.csv.zip
-          ls -lh outputs/products/txns_trousers_online.csv.zip
-          ls -lh outputs/products/product_info_top100_online.csv
-          unzip -l outputs/personas/customer_features.csv.zip | head -20
-          unzip -l outputs/products/txns_trousers_online.csv.zip | head -20
+          pip install numpy pandas scipy scikit-learn
 
       - name: Sanitize ZIP archives
         run: |
           python - <<'PY'
           from pathlib import Path
           from zipfile import ZIP_DEFLATED, ZipFile
-
           pairs = [
               (Path('outputs/personas/customer_features.csv.zip'), Path('/tmp/customer_features.clean.zip')),
               (Path('outputs/products/txns_trousers_online.csv.zip'), Path('/tmp/txns_trousers_online.clean.zip')),
           ]
           for source, target in pairs:
               with ZipFile(source) as zin:
-                  members = [
-                      name for name in zin.namelist()
-                      if name.lower().endswith('.csv') and not name.startswith('__MACOSX/') and '/._' not in name
-                  ]
+                  members = [name for name in zin.namelist() if name.lower().endswith('.csv') and not name.startswith('__MACOSX/') and '/._' not in name]
                   if len(members) != 1:
                       raise RuntimeError(f'{source}: expected one real CSV member, found {members}')
                   payload = zin.read(members[0])
               with ZipFile(target, 'w', compression=ZIP_DEFLATED) as zout:
                   zout.writestr(Path(members[0]).name, payload)
-              print(source, '->', target, 'member=', members[0], 'bytes=', len(payload))
           PY
 
-      - name: Run representation signal gate
-        id: experiment
+      - name: Run calibrated representation gate
+        id: calibration
         continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
           mkdir -p outputs/research/rich_persona_signal
-          python scripts/experiment_rich_persona_signal.py \
-            --customer-features /tmp/customer_features.clean.zip \
-            --trouser-transactions /tmp/txns_trousers_online.clean.zip \
-            --bootstrap-reps 100 \
-            --bootstrap-n 50000 \
-            2>&1 | tee outputs/research/rich_persona_signal/experiment.log
-
-      - name: Confirm rich vs original paper bins
-        id: confirmation
-        if: steps.experiment.outcome == 'success'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          python scripts/compare_rich_vs_paper_bins.py \
+          python scripts/experiment_rich_persona_calibration.py \
             --customer-features /tmp/customer_features.clean.zip \
             --trouser-transactions /tmp/txns_trousers_online.clean.zip \
             --product-info outputs/products/product_info_top100_online.csv \
-            --output outputs/research/rich_persona_signal/paper_bins_comparison.json \
+            --output outputs/research/rich_persona_signal/calibrated_comparison.json \
             --bootstrap-reps 200 \
             --bootstrap-n 50000 \
-            2>&1 | tee outputs/research/rich_persona_signal/confirmation.log
+            2>&1 | tee outputs/research/rich_persona_signal/calibration.log
 
-      - name: Show report or failure log
+      - name: Show result
         if: always()
         run: |
-          if [ -f outputs/research/rich_persona_signal/REPORT.md ]; then
-            cat outputs/research/rich_persona_signal/REPORT.md
-          elif [ -f outputs/research/rich_persona_signal/experiment.log ]; then
-            cat outputs/research/rich_persona_signal/experiment.log
-          fi
-          if [ -f outputs/research/rich_persona_signal/paper_bins_comparison.json ]; then
-            cat outputs/research/rich_persona_signal/paper_bins_comparison.json
-          elif [ -f outputs/research/rich_persona_signal/confirmation.log ]; then
-            cat outputs/research/rich_persona_signal/confirmation.log
+          if [ -f outputs/research/rich_persona_signal/calibrated_comparison.json ]; then
+            cat outputs/research/rich_persona_signal/calibrated_comparison.json
+          elif [ -f outputs/research/rich_persona_signal/calibration.log ]; then
+            cat outputs/research/rich_persona_signal/calibration.log
           fi
 
       - name: Persist experiment record to branch
@@ -108,7 +76,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f outputs/research/rich_persona_signal
           if ! git diff --cached --quiet; then
-            git commit -m "Record rich-persona signal run [skip ci]"
+            git commit -m "Record calibrated rich-persona run [skip ci]"
             git push
           fi
 
@@ -116,10 +84,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rich-persona-signal-results
+          name: rich-persona-calibration-results
           path: outputs/research/rich_persona_signal/
           if-no-files-found: warn
 
-      - name: Fail workflow if analysis failed
-        if: steps.experiment.outcome == 'failure' || steps.confirmation.outcome == 'failure'
+      - name: Fail workflow if experiment failed
+        if: steps.calibration.outcome == 'failure'
         run: exit 1

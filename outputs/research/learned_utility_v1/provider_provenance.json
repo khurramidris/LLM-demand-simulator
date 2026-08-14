@@ -1,0 +1,18 @@
+{
+  "model": "GPT-5.6 Sol",
+  "provider_mode": "single_conversation_batched_non_independent",
+  "elicitation": "pairwise relative offer preference only; no purchase probabilities",
+  "simple_subjects": 10,
+  "learned_subjects": 9,
+  "pairs_per_subject": 30,
+  "logical_pairwise_choices": 570,
+  "physical_independent_api_requests": 0,
+  "blinded": false,
+  "test_outcomes_present_elsewhere_in_conversation_context": true,
+  "notes": [
+    "The pair design and buyer representations were frozen before this choice file was written.",
+    "Choices were generated from buyer descriptions and offer attributes, not by programmatically fitting held-out demand labels.",
+    "Because the conversation contains earlier H&M pilot results, this run cannot be treated as a blinded confirmatory benchmark.",
+    "Use this as a research pilot; a decisive benchmark requires independent blinded model calls."
+  ]
+}

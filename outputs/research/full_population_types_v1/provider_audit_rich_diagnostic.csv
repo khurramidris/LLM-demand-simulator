@@ -1,0 +1,17 @@
+type_id,age,buyer,no_purchase,price_penalty_per_10usd,score_min,score_max,score_mean
+RD01,24.0,False,True,21,38,86,63.97
+RD02,35.0,True,False,11,47,95,75.35
+RD03,26.0,False,False,14,46,95,76.79
+RD04,54.0,False,False,12,43,93,69.29
+RD05,27.0,False,False,12,50,95,75.74
+RD06,33.0,False,False,14,47,95,72.81
+RD07,37.0,False,False,8,43,95,70.68
+RD08,29.0,False,False,14,48,95,73.23
+RD09,32.0,False,False,16,45,95,74.92
+RD10,27.0,False,False,16,47,95,74.4
+RD11,52.0,False,True,17,31,76,60.04
+RD12,51.0,False,False,10,45,95,70.94
+RD13,51.0,False,False,12,45,95,71.95
+RD14,26.0,False,False,14,48,95,73.23
+RD15,31.0,False,False,14,48,95,73.63
+RD16,34.0,False,False,14,48,95,73.23

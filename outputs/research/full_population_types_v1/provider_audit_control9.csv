@@ -1,0 +1,10 @@
+type_id,age,buyer,no_purchase,price_penalty_per_10usd,score_min,score_max,score_mean
+T0_NONBUYER,36.0,True,False,13,44,95,69.65
+T1,36.0,True,False,13,44,95,69.65
+T2,36.0,True,False,13,44,95,69.65
+T3,36.0,True,False,13,44,95,69.65
+T4,36.0,True,False,12,44,95,69.69
+T5,36.0,True,False,13,44,95,69.65
+T6,36.0,True,False,13,44,95,69.65
+T7,36.0,True,False,13,44,95,69.65
+T8,36.0,True,False,13,44,95,69.65

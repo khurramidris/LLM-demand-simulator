@@ -1,0 +1,15 @@
+type_id,age,buyer,no_purchase,price_penalty_per_10usd,score_min,score_max,score_mean
+SB1,35.0,True,False,13,44,95,69.65
+SB2,38.0,True,False,13,44,95,69.65
+SB3,35.0,True,False,13,44,95,69.65
+SB4,38.0,True,False,13,44,95,69.65
+SB5,42.0,True,False,13,44,95,69.65
+SB6,39.0,True,False,13,44,95,69.65
+SB7,41.0,True,False,13,44,95,69.65
+SB8,41.0,True,False,10,43,95,69.73
+SNB_16-24,20.0,False,True,21,38,86,63.97
+SNB_25-34,29.5,False,True,19,37,86,64.07
+SNB_35-44,39.5,False,True,18,34,82,62.04
+SNB_45-54,49.5,False,True,17,29,74,58.52
+SNB_55P,62.0,False,True,17,27,70,57.15
+SNB_UNKNOWN,36.0,False,True,18,34,82,62.04

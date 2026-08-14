@@ -1,0 +1,27 @@
+{
+  "provider": "GPT-5.6 Sol in-conversation semantic judgments encoded as a deterministic common scoring policy",
+  "frozen_before_evaluation": true,
+  "reads_sales_or_demand": false,
+  "reads_train_test_labels": false,
+  "catalog_products": 100,
+  "panels": {
+    "control9": {
+      "n_types": 9,
+      "weight_sum": 0.9999999999999994
+    },
+    "strict_full_population": {
+      "n_types": 14,
+      "weight_sum": 0.9999999999999994
+    },
+    "rich_diagnostic": {
+      "n_types": 16,
+      "weight_sum": 0.9999999999999994
+    }
+  },
+  "purpose": "Hold provider logic fixed while changing population representation.",
+  "limitations": [
+    "This is not a set of independent external API calls.",
+    "The semantic scoring policy is hand-specified by the model from type evidence and product descriptions.",
+    "The rich diagnostic type evidence includes the paper precomputed all-category features and is not strict holdout-clean."
+  ]
+}

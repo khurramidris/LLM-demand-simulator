@@ -1,0 +1,15 @@
+{
+  "protocol": "MATCHED-CELL-RICH-PROMPTS-v1",
+  "history_start": "2018-09-01",
+  "history_end": "2019-09-19",
+  "n_personas": 50,
+  "principle": "Same original population cells and memberships; treatment only enriches prompt with pre-cutoff trouser behavioral summaries.",
+  "columns": [
+    "persona_id",
+    "n_customers",
+    "base_persona_prompt",
+    "rich_persona_prompt",
+    "n_matched_customers",
+    "share_with_trouser_history"
+  ]
+}

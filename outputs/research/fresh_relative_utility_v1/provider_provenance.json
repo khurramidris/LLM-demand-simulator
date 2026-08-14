@@ -1,0 +1,21 @@
+{
+  "provider_model": "GPT-5.6 Sol",
+  "generation_mode": "single-conversation blinded relative-utility panel",
+  "physical_independent_api_requests": 0,
+  "logical_subject_profiles": 9,
+  "products_scored_per_profile": 100,
+  "provider_inputs": [
+    "evidence-grounded learned buyer-type summaries built with held-out-product transactions excluded",
+    "100-product catalog with product descriptions and candidate low/mid/high prices"
+  ],
+  "provider_excluded_information": [
+    "split-0 train/test product labels",
+    "held-out demand",
+    "training demand",
+    "paper model predictions",
+    "evaluation metrics"
+  ],
+  "elicitation_target": "relative product preference at reference price plus price penalty; not purchase probability",
+  "known_limitation": "The provider is the assistant in the same broader conversation that has discussed prior H&M experiments. The scoring panel itself was generated without opening split labels or sales outcomes after the blinded panel was frozen, but it is not equivalent to independent isolated API calls.",
+  "frozen_before_evaluation": true
+}

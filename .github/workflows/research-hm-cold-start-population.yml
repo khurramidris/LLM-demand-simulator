@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "scripts/research_hm_cold_start_population.py"
+      - "scripts/research_hm_cold_start_population_runner.py"
       - "research/experiments/006_cold_start_population_benchmark.md"
       - ".github/workflows/research-hm-cold-start-population.yml"
       - "outputs/products/txns_trousers_online.csv.zip"
@@ -34,7 +35,7 @@ jobs:
 
       - name: Run preregistered Stage A benchmark
         run: |
-          python scripts/research_hm_cold_start_population.py \
+          python scripts/research_hm_cold_start_population_runner.py \
             --output-dir research/results/006_cold_start_population
 
       - name: Upload benchmark artifact

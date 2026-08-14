@@ -1,0 +1,177 @@
+{
+  "protocol": "FRESH-GPT56-RELATIVE-UTILITY-SPLIT0-v1",
+  "decision": "ADVANCE_FRESH_LEARNED_UTILITY",
+  "primary_gate_passed": true,
+  "beats_surrogate_on_nll_or_crps": true,
+  "fit": {
+    "exposure_n": 250,
+    "intercept": -4.888944643538737,
+    "slope": 0.014865341246346878,
+    "train_zt_nll": 1.8385368195593002,
+    "success": true
+  },
+  "summary": {
+    "paper_llm_mix_cal": {
+      "mae": 1.3529455874757736,
+      "rmse": 1.7285789164833791,
+      "zt_avg_nll": 1.7799559361273736,
+      "zt_avg_crps": 0.9168211594164736,
+      "zt_pit_ks": 0.2942716575670137,
+      "zt_interval_score_0.9": 8.402359384874657,
+      "zt_interval_score_0.95": 12.183905624605003
+    },
+    "empirical_persona_relative_utility_surrogate": {
+      "mae": 1.3332540154688772,
+      "rmse": 1.7112002550200733,
+      "zt_avg_nll": 1.7713933027653657,
+      "zt_avg_crps": 0.905507125500316,
+      "zt_pit_ks": 0.28758921661032766,
+      "zt_interval_score_0.9": 8.370339161575732,
+      "zt_interval_score_0.95": 12.282704866231297
+    },
+    "fresh_gpt56_learned_type_relative_utility": {
+      "mae": 1.3282012402745298,
+      "rmse": 1.7071108507548496,
+      "zt_avg_nll": 1.7724390784054278,
+      "zt_avg_crps": 0.9028253419001474,
+      "zt_pit_ks": 0.2894822151148417,
+      "zt_interval_score_0.9": 8.870233831893827,
+      "zt_interval_score_0.95": 12.283126184958913
+    }
+  },
+  "effects_vs_paper": {
+    "zt_avg_nll": {
+      "absolute": -0.007516857721945769,
+      "relative": -0.004223058318117748
+    },
+    "zt_avg_crps": {
+      "absolute": -0.01399581751632617,
+      "relative": -0.01526559173790671
+    },
+    "mae": {
+      "absolute": -0.024744347201243855,
+      "relative": -0.018289240476706856
+    },
+    "rmse": {
+      "absolute": -0.02146806572852955,
+      "relative": -0.012419488357641307
+    }
+  },
+  "effects_vs_surrogate": {
+    "zt_avg_nll": {
+      "absolute": 0.001045775640062141,
+      "relative": 0.0005903689702504547
+    },
+    "zt_avg_crps": {
+      "absolute": -0.0026817836001685746,
+      "relative": -0.002961637213718026
+    },
+    "mae": {
+      "absolute": -0.005052775194347436,
+      "relative": -0.00378980684529983
+    },
+    "rmse": {
+      "absolute": -0.0040894042652237506,
+      "relative": -0.002389787082620426
+    }
+  },
+  "product_bootstrap_vs_paper": {
+    "zt_avg_nll": {
+      "fresh_minus_baseline_boot_mean": -0.0072949040173911385,
+      "ci95_low": -0.027610243042138705,
+      "ci95_high": 0.015630952766143773,
+      "p_fresh_better": 0.75515
+    },
+    "zt_avg_crps": {
+      "fresh_minus_baseline_boot_mean": -0.013834555417043816,
+      "ci95_low": -0.02701593506230759,
+      "ci95_high": -0.001706507820280774,
+      "p_fresh_better": 0.9883
+    },
+    "mae": {
+      "fresh_minus_baseline_boot_mean": -0.024441349602611163,
+      "ci95_low": -0.04790387571498359,
+      "ci95_high": -0.002686169925120539,
+      "p_fresh_better": 0.9868
+    }
+  },
+  "coverage": {
+    "train_rows": 6944,
+    "test_rows": 4747,
+    "train_products": 60,
+    "test_products": 40
+  },
+  "signal_audit": {
+    "type_ids": [
+      "T0_NONBUYER",
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "T8"
+    ],
+    "weights": [
+      0.9128356766364562,
+      0.07498023925855245,
+      0.0016791510867383008,
+      0.002047745227729701,
+      0.0008109071101809005,
+      0.0023344295596119014,
+      0.0019125940426995012,
+      0.0012777930221033007,
+      0.0021214640559280014
+    ],
+    "train_utility_mean": [
+      58.54569256756757,
+      61.93944256756761,
+      61.914569256756764,
+      61.929771959459465,
+      63.18914695945941,
+      62.62018581081086,
+      61.5361908783784,
+      62.55185810810809,
+      61.83686655405406
+    ],
+    "train_utility_sd": [
+      14.449730131448877,
+      14.047644141964481,
+      13.908898836106385,
+      13.743458474300487,
+      12.725509500646258,
+      14.559603666246444,
+      13.582246624570626,
+      13.234472056016752,
+      13.50538020996217
+    ]
+  },
+  "provider_provenance": {
+    "provider_model": "GPT-5.6 Sol",
+    "generation_mode": "single-conversation blinded relative-utility panel",
+    "physical_independent_api_requests": 0,
+    "logical_subject_profiles": 9,
+    "products_scored_per_profile": 100,
+    "provider_inputs": [
+      "evidence-grounded learned buyer-type summaries built with held-out-product transactions excluded",
+      "100-product catalog with product descriptions and candidate low/mid/high prices"
+    ],
+    "provider_excluded_information": [
+      "split-0 train/test product labels",
+      "held-out demand",
+      "training demand",
+      "paper model predictions",
+      "evaluation metrics"
+    ],
+    "elicitation_target": "relative product preference at reference price plus price penalty; not purchase probability",
+    "known_limitation": "The provider is the assistant in the same broader conversation that has discussed prior H&M experiments. The scoring panel itself was generated without opening split labels or sales outcomes after the blinded panel was frozen, but it is not equivalent to independent isolated API calls.",
+    "frozen_before_evaluation": true
+  },
+  "limitations": [
+    "Original top-50 persona membership uses the repository precomputed full-period customer_features artifact.",
+    "Candidate price grids are historically observed and shared with the paper.",
+    "GPT-5.6 judgments are produced inside this conversation rather than independent API calls."
+  ],
+  "interpretation_rule": "If fresh beats paper but not the empirical relative-utility surrogate, relative utility earns continuation but learned-type GPT elicitation has not earned its added complexity."
+}

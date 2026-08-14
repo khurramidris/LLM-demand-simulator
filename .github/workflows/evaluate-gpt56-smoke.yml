@@ -1,0 +1,52 @@
+name: evaluate-gpt56-smoke
+
+on:
+  push:
+    branches: ["research/rich-persona-signal"]
+    paths:
+      - "scripts/evaluate_gpt56_smoke.py"
+      - ".github/workflows/evaluate-gpt56-smoke.yml"
+      - "outputs/research/rich_persona_signal/gpt56_smoke/responses_*.jsonl"
+      - "outputs/research/rich_persona_signal/gpt56_smoke/provider_provenance.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rich-persona-signal
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install analysis dependencies
+        run: pip install numpy pandas scipy
+
+      - name: Evaluate frozen smoke responses
+        run: python scripts/evaluate_gpt56_smoke.py
+
+      - name: Show report
+        run: cat outputs/research/rich_persona_signal/gpt56_smoke/SMOKE_REPORT.md
+
+      - name: Persist audit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/research/rich_persona_signal/gpt56_smoke/smoke_results.json \
+                  outputs/research/rich_persona_signal/gpt56_smoke/SMOKE_REPORT.md \
+                  outputs/research/rich_persona_signal/gpt56_smoke/pair_summary.csv \
+                  outputs/research/rich_persona_signal/gpt56_smoke/persona_summary.csv \
+                  outputs/research/rich_persona_signal/gpt56_smoke/product_summary.csv
+          if git diff --cached --quiet; then
+            echo "No audit changes"
+          else
+            git commit -m "Record GPT-5.6 smoke audit"
+            git push
+          fi

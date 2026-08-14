@@ -1,0 +1,44 @@
+name: build-matched-rich-prompts
+
+on:
+  push:
+    branches: ["research/rich-persona-signal"]
+    paths:
+      - "scripts/build_rich_cell_prompts.py"
+      - ".github/workflows/build-matched-rich-prompts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/rich-persona-signal
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install numpy pandas
+
+      - name: Build matched rich prompts
+        run: python scripts/build_rich_cell_prompts.py
+
+      - name: Persist prompt artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/research/rich_persona_signal/matched_rich_persona_prompts.csv \
+                  outputs/research/rich_persona_signal/matched_rich_persona_manifest.json
+          if git diff --cached --quiet; then
+            echo "No prompt artifact changes"
+          else
+            git commit -m "Record matched rich persona prompts"
+            git push
+          fi

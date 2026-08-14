@@ -1,0 +1,48 @@
+name: Research H&M Experiment 007 confirmation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/research_hm_exp007_confirmation.py"
+      - "research/experiments/007_expanded_cold_start_confirmation.md"
+      - ".github/workflows/research-hm-exp007-confirmation.yml"
+      - "scripts/research_hm_cold_start_population.py"
+      - "scripts/research_hm_cold_start_population_runner.py"
+      - "outputs/products/txns_trousers_online.csv.zip"
+      - "outputs/personas/customer_features.csv.zip"
+      - "outputs/personas/persona_cells.csv"
+
+permissions:
+  contents: read
+
+jobs:
+  confirmation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "numpy<3" "pandas<3" "scipy<2" "scikit-learn<2" "datasets>=3,<5" "pyarrow<22"
+
+      - name: Run preregistered Experiment 007 confirmation
+        run: |
+          python scripts/research_hm_exp007_confirmation.py \
+            --output-dir research/results/007_expanded_cold_start_confirmation
+
+      - name: Upload confirmatory artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp007-expanded-cold-start-confirmation-results
+          path: research/results/007_expanded_cold_start_confirmation
+          if-no-files-found: warn

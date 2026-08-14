@@ -313,6 +313,7 @@ def score_count_model(
     seed: int,
     tail_prob: float,
     support_cap: int,
+    full_distribution_metrics: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     working = rows[["article_id", "offer_price", "demand"]].copy().reset_index(drop=True)
     y = working["demand"].to_numpy(int)
@@ -321,33 +322,43 @@ def score_count_model(
     row_nll = -logpmf + np.log1p(-p0)
     pred = conditional_mean(mu, p0)
 
-    cdf_y = raw_cdf(y, mu, family, dispersion)
-    cdf_below = raw_cdf(y - 1, mu, family, dispersion)
-    denom = np.clip(1.0 - p0, 1e-12, None)
-    zcdf_y = np.clip((cdf_y - p0) / denom, 0.0, 1.0)
-    zcdf_below = np.clip((cdf_below - p0) / denom, 0.0, 1.0)
-    rng = np.random.default_rng(seed)
-    pit = zcdf_below + rng.uniform(size=len(y)) * np.maximum(zcdf_y - zcdf_below, 0.0)
+    if full_distribution_metrics:
+        cdf_y = raw_cdf(y, mu, family, dispersion)
+        cdf_below = raw_cdf(y - 1, mu, family, dispersion)
+        denom = np.clip(1.0 - p0, 1e-12, None)
+        zcdf_y = np.clip((cdf_y - p0) / denom, 0.0, 1.0)
+        zcdf_below = np.clip((cdf_below - p0) / denom, 0.0, 1.0)
+        rng = np.random.default_rng(seed)
+        pit = zcdf_below + rng.uniform(size=len(y)) * np.maximum(zcdf_y - zcdf_below, 0.0)
 
-    support_max = crps_support_max(mu, y, family, dispersion, tail_prob, support_cap)
-    row_crps, max_tail = zero_truncated_crps(
-        y, mu, family, dispersion, p0, support_max=support_max
-    )
-
-    interval_scores: dict[str, np.ndarray] = {}
-    for level in (0.9, 0.95):
-        alpha = 1.0 - level
-        low_target = p0 + (alpha / 2.0) * (1.0 - p0)
-        high_target = p0 + (1.0 - alpha / 2.0) * (1.0 - p0)
-        lower = np.maximum(1.0, raw_ppf(low_target, mu, family, dispersion))
-        upper = np.maximum(1.0, raw_ppf(high_target, mu, family, dispersion))
-        score = (
-            upper
-            - lower
-            + (2.0 / alpha) * (lower - y) * (y < lower)
-            + (2.0 / alpha) * (y - upper) * (y > upper)
+        support_max = crps_support_max(mu, y, family, dispersion, tail_prob, support_cap)
+        row_crps, max_tail = zero_truncated_crps(
+            y, mu, family, dispersion, p0, support_max=support_max
         )
-        interval_scores[f"zt_interval_score_{level:g}"] = np.asarray(score, dtype=float)
+
+        interval_scores: dict[str, np.ndarray] = {}
+        for level in (0.9, 0.95):
+            alpha = 1.0 - level
+            low_target = p0 + (alpha / 2.0) * (1.0 - p0)
+            high_target = p0 + (1.0 - alpha / 2.0) * (1.0 - p0)
+            lower = np.maximum(1.0, raw_ppf(low_target, mu, family, dispersion))
+            upper = np.maximum(1.0, raw_ppf(high_target, mu, family, dispersion))
+            score = (
+                upper
+                - lower
+                + (2.0 / alpha) * (lower - y) * (y < lower)
+                + (2.0 / alpha) * (y - upper) * (y > upper)
+            )
+            interval_scores[f"zt_interval_score_{level:g}"] = np.asarray(score, dtype=float)
+    else:
+        pit = np.full(len(y), np.nan, dtype=float)
+        row_crps = np.full(len(y), np.nan, dtype=float)
+        support_max = 0
+        max_tail = float("nan")
+        interval_scores = {
+            "zt_interval_score_0.9": np.full(len(y), np.nan, dtype=float),
+            "zt_interval_score_0.95": np.full(len(y), np.nan, dtype=float),
+        }
 
     working["row_nll"] = row_nll
     working["row_crps"] = row_crps
@@ -806,6 +817,7 @@ def main() -> None:
                     seed=7000 + split_idx * 100 + (0 if sample == "train" else 50),
                     tail_prob=args.crps_tail_prob,
                     support_cap=args.max_crps_support,
+                    full_distribution_metrics=(sample == "test"),
                 )
                 pair_scores["split_index"] = split_idx
                 pair_scores["sample"] = sample

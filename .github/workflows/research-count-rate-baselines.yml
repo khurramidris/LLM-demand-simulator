@@ -1,0 +1,172 @@
+name: research-count-rate-baselines
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/research_count_rate_baselines.py"
+      - "research/experiments/003_count_rate_baselines.md"
+      - ".github/workflows/research-count-rate-baselines.yml"
+      - "demand_sim/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            numpy==2.2.6 \
+            pandas==2.2.3 \
+            scipy==1.15.3 \
+            scikit-learn==1.6.1
+
+      - name: Syntax check
+        run: python -m py_compile scripts/research_count_rate_baselines.py
+
+      - name: Verify committed paper baseline
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          df = pd.read_csv("outputs/demand_prediction/summary_mean_metrics_test.csv").set_index("model")
+          assert abs(float(df.loc["llm-mix-cal", "zt_avg_nll"]) - 1.8346024861697727) < 1e-12
+          assert abs(float(df.loc["llm-mix-cal", "zt_avg_crps"]) - 0.9426390618243496) < 1e-12
+          assert abs(float(df.loc["llm-mix-cal", "mae"]) - 1.38048553572638) < 1e-12
+          print(df.loc[["llm-mix-cal"], ["zt_avg_nll", "zt_avg_crps", "mae", "rmse"]])
+          PY
+
+      - name: Numerical gradient check
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import math
+          import numpy as np
+
+          spec = importlib.util.spec_from_file_location("exp003", "scripts/research_count_rate_baselines.py")
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+
+          rng = np.random.default_rng(19)
+          X = np.column_stack([np.ones(32), rng.normal(size=(32, 3))])
+          y = rng.integers(1, 8, size=32)
+
+          def central_diff(fun, params, eps=1e-6):
+              out = np.zeros_like(params, dtype=float)
+              for idx in range(len(params)):
+                  plus = params.copy(); plus[idx] += eps
+                  minus = params.copy(); minus[idx] -= eps
+                  out[idx] = (fun(plus)[0] - fun(minus)[0]) / (2 * eps)
+              return out
+
+          beta = np.array([0.2, -0.1, 0.3, 0.05])
+          obj, grad = mod.ztp_objective(beta, X, y, 0.7)
+          fd = central_diff(lambda p: mod.ztp_objective(p, X, y, 0.7), beta)
+          assert np.max(np.abs(grad - fd)) < 1e-4, (grad, fd)
+
+          params = np.concatenate([beta, [math.log(3.0)]])
+          obj, grad = mod.ztnb_objective(params, X, y, 0.7)
+          fd = central_diff(lambda p: mod.ztnb_objective(p, X, y, 0.7), params)
+          assert np.max(np.abs(grad - fd)) < 1e-4, (grad, fd)
+          print("gradient checks passed")
+          PY
+
+  smoke:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            numpy==2.2.6 \
+            pandas==2.2.3 \
+            scipy==1.15.3 \
+            scikit-learn==1.6.1
+
+      - name: One-split smoke experiment
+        run: |
+          python scripts/research_count_rate_baselines.py \
+            --n-splits 1 \
+            --inner-folds 3 \
+            --pca-components 16 \
+            --output-dir outputs/research/count_rate_baselines_smoke
+
+      - name: Print smoke result
+        run: |
+          cat outputs/research/count_rate_baselines_smoke/mean_metrics_test.csv
+          cat outputs/research/count_rate_baselines_smoke/decision.json
+
+      - name: Upload smoke outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: count-rate-baselines-smoke
+          path: outputs/research/count_rate_baselines_smoke/
+
+  full:
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            numpy==2.2.6 \
+            pandas==2.2.3 \
+            scipy==1.15.3 \
+            scikit-learn==1.6.1
+
+      - name: Run 10-split count-rate ladder
+        run: |
+          python scripts/research_count_rate_baselines.py \
+            --n-splits 10 \
+            --inner-folds 3 \
+            --pca-components 16
+
+      - name: Print held-out result
+        if: always()
+        run: |
+          if [ -f outputs/research/count_rate_baselines/mean_metrics_test.csv ]; then
+            cat outputs/research/count_rate_baselines/mean_metrics_test.csv
+          fi
+          if [ -f outputs/research/count_rate_baselines/family_paired_uncertainty.csv ]; then
+            cat outputs/research/count_rate_baselines/family_paired_uncertainty.csv
+          fi
+          if [ -f outputs/research/count_rate_baselines/decision.json ]; then
+            cat outputs/research/count_rate_baselines/decision.json
+          fi
+
+      - name: Upload full research outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: count-rate-baselines-full
+          path: outputs/research/count_rate_baselines/
+          if-no-files-found: warn

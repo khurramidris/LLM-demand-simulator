@@ -1,0 +1,99 @@
+{
+  "protocol": "GPT56-TEMPORAL-HOLDOUT-v1",
+  "decision": "DO_NOT_ADVANCE",
+  "coverage": {
+    "all_selected_product_rows_train": 491,
+    "matched_candidate_price_rows_train": 468,
+    "train_row_coverage": 0.9531568228105907,
+    "all_selected_product_rows_test": 164,
+    "matched_candidate_price_rows_test": 147,
+    "test_row_coverage": 0.8963414634146342,
+    "test_start": "2019-06-01",
+    "test_end": "2019-09-18"
+  },
+  "fits": {
+    "control": {
+      "exposure_n": 250,
+      "intercept": -4.456094319454791,
+      "slope": 0.22445770129226272,
+      "train_zt_nll": 1.9888467989833978,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL"
+    },
+    "rich": {
+      "exposure_n": 250,
+      "intercept": -4.407321576704195,
+      "slope": 0.2527580095989667,
+      "train_zt_nll": 1.988148317899873,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL"
+    }
+  },
+  "summary": {
+    "control": {
+      "n_test_rows": 147,
+      "zt_avg_nll": 1.3855051952564255,
+      "zt_avg_crps": 0.7289201902591058,
+      "mae": 1.3217502633691194,
+      "rmse": 1.4181673282294005
+    },
+    "rich": {
+      "n_test_rows": 147,
+      "zt_avg_nll": 1.3880327995479913,
+      "zt_avg_crps": 0.7311652317519165,
+      "mae": 1.3260101276553438,
+      "rmse": 1.421545193455292
+    }
+  },
+  "effects": {
+    "zt_avg_nll": {
+      "absolute_delta_rich_minus_control": 0.0025276042915658437,
+      "relative_delta": 0.0018243196057435508
+    },
+    "zt_avg_crps": {
+      "absolute_delta_rich_minus_control": 0.0022450414928106843,
+      "relative_delta": 0.0030799551484678315
+    },
+    "mae": {
+      "absolute_delta_rich_minus_control": 0.00425986428622438,
+      "relative_delta": 0.00322289649132814
+    },
+    "rmse": {
+      "absolute_delta_rich_minus_control": 0.003377865225891563,
+      "relative_delta": 0.0023818523799366254
+    }
+  },
+  "paired_bootstrap": {
+    "nll": {
+      "rich_minus_control_mean": 0.0025580671981683444,
+      "ci95_low": -0.00018706504161080103,
+      "ci95_high": 0.005231956081829997,
+      "p_rich_better": 0.0334
+    },
+    "crps": {
+      "rich_minus_control_mean": 0.002271661984186246,
+      "ci95_low": -5.165829809126715e-05,
+      "ci95_high": 0.004552862464745661,
+      "p_rich_better": 0.0276
+    },
+    "mae": {
+      "rich_minus_control_mean": 0.004299636513522519,
+      "ci95_low": 0.000766949928797578,
+      "ci95_high": 0.0077051275380383465,
+      "p_rich_better": 0.0088
+    },
+    "rmse": {
+      "rich_minus_control_mean": 0.0034307441141572114,
+      "ci95_low": -6.66303925540567e-05,
+      "ci95_high": 0.006946944108933365,
+      "p_rich_better": 0.0284
+    }
+  },
+  "limitations": [
+    "Original persona-cell memberships come from the repository's precomputed full-period customer features and therefore are not temporally rebuilt.",
+    "Candidate price grids are the repository's original historically observed grids and are transductive.",
+    "Both limitations are identical across control and treatment; only added trouser-history context is cutoff-safe.",
+    "ChatGPT-in-conversation responses are not independent blinded API calls."
+  ],
+  "claim_scope": "Small 5-product temporal real-demand pilot of incremental rich-history prompting; not the paper's product-holdout benchmark."
+}

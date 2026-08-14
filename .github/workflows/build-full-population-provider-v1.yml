@@ -1,0 +1,27 @@
+name: build-full-population-provider-v1
+on:
+  push:
+    branches: [research/full-population-types-v1]
+    paths:
+      - 'scripts/build_full_population_provider_v1.py'
+      - '.github/workflows/build-full-population-provider-v1.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - name: Freeze common provider panels
+        run: python scripts/build_full_population_provider_v1.py
+      - name: Persist provider panels
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add outputs/research/full_population_types_v1/provider_*
+          git diff --cached --quiet || git commit -m 'Record common provider representation panels'
+          git push

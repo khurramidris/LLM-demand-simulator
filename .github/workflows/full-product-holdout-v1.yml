@@ -1,0 +1,30 @@
+name: full-product-holdout-v1
+on:
+  push:
+    branches: [research/full-product-holdout-v1]
+    paths:
+      - 'scripts/evaluate_full_product_holdout_v1.py'
+      - '.github/workflows/full-product-holdout-v1.yml'
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install analysis dependencies
+        run: pip install numpy pandas scipy scikit-learn
+      - name: Run seven-split full product holdout
+        run: PYTHONPATH=. python scripts/evaluate_full_product_holdout_v1.py
+      - name: Show report
+        run: cat outputs/research/full_product_holdout_v1/REPORT.md
+      - name: Persist experimental record
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add outputs/research/full_product_holdout_v1/
+          git diff --cached --quiet || git commit -m 'Record full product-holdout learned utility result'
+          git push

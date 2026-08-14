@@ -8,7 +8,7 @@ The existing H&M positive-count benchmark does not identify exposure, incidence,
 
 ## Unit of GPT scoring
 
-One product is scored across its entire offered-price grid at once. To reduce chat-mediated inference volume while preserving product/price reasoning, GPT outputs two latent parameters per arm:
+One product is scored across its entire offered-price grid at once. To reduce chat-mediated inference volume while preserving product/price reasoning, GPT supplies two latent parameters per arm:
 
 - `appeal_ref` in [0, 100]: expected relative appeal/value at the article's reference price;
 - `price_sensitivity` in [0, 30]: nonnegative score-point sensitivity to log price ratio.
@@ -41,15 +41,32 @@ GPT reasons over the exact same 50 customer records, equally weighted, but recei
 
 No additional psychographic or demographic traits may be inferred as if observed.
 
-## GPT instruction used for every batch
+## GPT instruction / reasoning contract
 
-> You are the behavioral scoring component in a preregistered blinded retail-demand experiment. You have no access to sales counts, demand targets, product popularity, heldout outcomes, model residuals, or evaluation metrics. Do not guess historical H&M popularity from external memory. Use only the supplied product metadata, price grid, and the population representation for the requested arm. For each product estimate (1) relative expected appeal/value at the geometric-mean reference price and (2) nonnegative price sensitivity. Appeal 0 means essentially no fit/value, 50 means ordinary/typical fit/value, and 100 means unusually broad/strong fit/value. Price sensitivity is 0–30 score points per unit log-price ratio. Base judgments on plausible category fit, demographic breadth, style/formality, garment utility, color/appearance, product description, and compatibility with the supplied population evidence. Do not output literal purchase probabilities or sales counts. Do not tune to any benchmark result. Preserve article IDs exactly and return only the requested structured records.
+> You are the behavioral scoring component in a preregistered blinded retail-demand experiment. You have no access to sales counts, demand targets, product popularity, heldout outcomes, model residuals, or evaluation metrics. Do not guess historical H&M popularity from external memory. Use only the supplied product metadata, price grid, and the population representation for the requested arm. Estimate relative expected appeal/value and nonnegative price sensitivity. Base judgments on plausible category fit, demographic breadth, style/formality, garment utility, color/appearance, product description, and compatibility with the supplied population evidence. Do not output literal purchase probabilities or sales counts. Do not tune to any benchmark result.
 
-## Batch independence / context
+## Operational implementation note — frozen before outcome inspection
 
-The 100 articles may be scored in several batches for practical context size. Every batch uses the same frozen instruction and the same population artifact for its arm. Product order is article-ID order. No batch is rescored after evaluation.
+The ChatGPT harness cannot recursively invoke thousands of independent copies of GPT-5.6 Sol. To avoid falsely claiming that 400 independent API completions occurred, GPT-5.6 Sol converted its blinded semantic/customer judgments into a **deterministic scoring implementation**, committed as `scripts/research_generate_gpt56_frozen_scores.py` before any Experiment 004 outcome evaluation.
 
-Because this is conversation-mediated GPT-5.6 Sol rather than an API snapshot, exact generative replay is not guaranteed. Reproducibility is instead obtained by committing the frozen latent outputs; all downstream transformations and evaluation from those outputs are deterministic.
+That implementation is part of the model output for this experiment. It mechanically maps only the blinded product and population evidence into `appeal_ref` and `price_sensitivity`. It encodes the following target-blind judgments:
+
+- everyday/basic garment utility is broader than more specialized styling;
+- common neutral denim/trouser colors tend to have broader plausible appeal than unusual colors;
+- stretch, elasticated construction and similar comfort/utility cues modestly increase broad appeal;
+- a small number of specialized style cues receive modest breadth penalties;
+- value is judged relative to the product's offered-price reference point;
+- customer conditioning changes product fit through observed price behavior and age × H&M product-segment compatibility;
+- continuous observed age, purchase rate and mean paid price are used only in the rich arm, whereas the same customers' bins are used in the coarse arm;
+- all price sensitivity is constrained nonnegative.
+
+This choice makes the zero-cost chat experiment reproducible, but it is **not equivalent to a native GPT-5.6 API benchmark**. Any Experiment 004 result must therefore be described as a **GPT-5.6-Sol-authored deterministic semantic/customer scorer**. A native model-call replication would be a separate confirmatory experiment if API access is later used.
+
+Crucially, this implementation choice was frozen while the scorer still had zero access to row-level demand, heldout outcomes, product-demand totals, residuals, or treatment metrics. The experiment's arms, endpoint, downstream model, split protocol and success criteria are unchanged.
+
+## Reproducibility
+
+The target-blind input artifact is generated by `scripts/research_prepare_gpt56_blinded_inputs.py` with seed `20260814`. The frozen scoring implementation is then applied to those artifacts and its 400 latent article-arm records are committed together with a SHA-256 digest before the evaluator is allowed to read `demand`.
 
 ## Mechanical validation before target unblinding
 
@@ -68,4 +85,4 @@ Once these checks pass, the latent artifact is frozen. Only then may the evaluat
 
 ## Interpretation caution
 
-A strong result would show that the frozen GPT score carries heldout information about **positive-count magnitude conditional on a sale day**. It would not by itself establish that GPT predicts whether an item sells, customer-level choices, causal price elasticity, inventory-aware demand, or market response under interventions.
+A strong result would show that the frozen GPT-authored score carries heldout information about **positive-count magnitude conditional on a sale day**. It would not by itself establish that GPT predicts whether an item sells, customer-level choices, causal price elasticity, inventory-aware demand, or market response under interventions.

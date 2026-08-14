@@ -1,0 +1,40 @@
+name: research-gpt56-persona-richness-rerun
+
+on:
+  push:
+    branches:
+      - research/04-gpt56-persona-richness
+  workflow_dispatch:
+
+jobs:
+  prepare-blinded-inputs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install minimal dependencies
+        run: python -m pip install --upgrade pip pandas numpy
+      - name: Prepare target-blind GPT inputs
+        run: python scripts/research_prepare_gpt56_blinded_inputs.py --output-dir /tmp/exp004_blinded_inputs
+      - name: Verify artifact has no target columns
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/exp004_blinded_inputs/manifest.json').read_text())
+          assert m['contains_demand_targets'] is False
+          assert m['n_products'] == 100
+          assert m['n_matched_states'] == 50
+          assert m['n_paper_personas'] == 50
+          print(json.dumps(m, indent=2))
+          PY
+      - name: Upload blinded scorer inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: exp004-blinded-inputs-rerun
+          path: /tmp/exp004_blinded_inputs
+          if-no-files-found: error
+          retention-days: 30

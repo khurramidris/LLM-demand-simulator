@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/home/runner/work/LLM-demand-simulator/LLM-demand-simulator/scripts/experiment_rich_persona_signal.py", line 463, in <module>
+    main()
+  File "/home/runner/work/LLM-demand-simulator/LLM-demand-simulator/scripts/experiment_rich_persona_signal.py", line 282, in main
+    customer_features = pd.read_csv(args.customer_features, compression="zip")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 1904, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/pandas/io/common.py", line 857, in get_handle
+    raise ValueError(
+ValueError: Multiple files found in ZIP file. Only one file per ZIP: ['customer_features.csv', '__MACOSX/._customer_features.csv']

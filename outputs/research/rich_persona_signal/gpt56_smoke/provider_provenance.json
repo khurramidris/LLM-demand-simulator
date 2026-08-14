@@ -1,0 +1,24 @@
+{
+  "model": "GPT-5.6 Sol",
+  "provider_mode": "single_conversation_batched_non_independent",
+  "logical_outputs": 100,
+  "physical_independent_api_requests": 0,
+  "experiment_context_visible_to_model": true,
+  "control_and_treatment_arms_visible_within_same_conversation": true,
+  "sampling_independence": false,
+  "blinded": false,
+  "response_format": "structured price-grid purchase probabilities",
+  "intended_use": "mechanism smoke test only",
+  "invalid_uses": [
+    "claiming an unbiased treatment effect of rich prompting",
+    "claiming improvement in held-out aggregate H&M demand prediction",
+    "claiming causal price elasticity",
+    "treating the 100 logical outputs as 100 independent API samples"
+  ],
+  "notes": [
+    "The prompts were frozen before response recording.",
+    "The same GPT-5.6 Sol model generated both arms inside one conversation context.",
+    "A failed oversized serialization was discarded before evaluation; its contents are not scored.",
+    "The retained response files are the only response records evaluated."
+  ]
+}

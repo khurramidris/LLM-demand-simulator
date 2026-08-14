@@ -1,0 +1,232 @@
+{
+  "protocol": "SIMPERSONA-PAIRWISE-UTILITY-v1",
+  "decision": "ADVANCE",
+  "summary": {
+    "learned_pairwise_utility": {
+      "n_test_rows": 147,
+      "zt_avg_nll": 1.3800639809832969,
+      "zt_avg_crps": 0.7235476200577362,
+      "mae": 1.3151991904943772,
+      "rmse": 1.4083306014585988
+    },
+    "paper_probability_baseline": {
+      "n_test_rows": 147,
+      "zt_avg_nll": 1.385501798862087,
+      "zt_avg_crps": 0.7289171689102147,
+      "mae": 1.321745526216952,
+      "rmse": 1.4181627111837574
+    },
+    "simple_pairwise_utility": {
+      "n_test_rows": 147,
+      "zt_avg_nll": 1.3882383184356393,
+      "zt_avg_crps": 0.7311889853589106,
+      "mae": 1.3246259154231814,
+      "rmse": 1.4216433731054672
+    }
+  },
+  "fits": {
+    "learned_pairwise_utility": {
+      "exposure_n": 250,
+      "intercept": -4.670116642033916,
+      "slope": 0.08750090961448896,
+      "train_zt_nll": 1.991263643470026,
+      "success": true
+    },
+    "paper_probability_baseline": {
+      "exposure_n": 250,
+      "intercept": -4.456098322490984,
+      "slope": 0.22445678538981373,
+      "train_zt_nll": 1.9888467989764924,
+      "success": true
+    },
+    "simple_pairwise_utility": {
+      "exposure_n": 250,
+      "intercept": -4.664583604451548,
+      "slope": 0.12563687814832186,
+      "train_zt_nll": 1.9887425507658472,
+      "success": true
+    }
+  },
+  "effects_vs_baseline": {
+    "simple_pairwise_utility": {
+      "zt_avg_nll": {
+        "absolute": 0.002736519573552254,
+        "relative": 0.001975110805196903
+      },
+      "zt_avg_crps": {
+        "absolute": 0.002271816448695896,
+        "relative": 0.0031167004230294505
+      },
+      "mae": {
+        "absolute": 0.002880389206229461,
+        "relative": 0.002179231288547348
+      },
+      "rmse": {
+        "absolute": 0.0034806619217098156,
+        "relative": 0.002454345960629909
+      }
+    },
+    "learned_pairwise_utility": {
+      "zt_avg_nll": {
+        "absolute": -0.005437817878790163,
+        "relative": -0.003924800302140527
+      },
+      "zt_avg_crps": {
+        "absolute": -0.005369548852478534,
+        "relative": -0.007366473285992711
+      },
+      "mae": {
+        "absolute": -0.006546335722574792,
+        "relative": -0.004952795823952177
+      },
+      "rmse": {
+        "absolute": -0.009832109725158578,
+        "relative": -0.006932991290506854
+      }
+    }
+  },
+  "learned_vs_simple_utility": {
+    "zt_avg_nll": {
+      "absolute": -0.008174337452342417,
+      "relative": -0.00588828109971335
+    },
+    "zt_avg_crps": {
+      "absolute": -0.00764136530117443,
+      "relative": -0.010450602312374272
+    },
+    "mae": {
+      "absolute": -0.009426724928804253,
+      "relative": -0.007116518572560672
+    },
+    "rmse": {
+      "absolute": -0.013312771646868393,
+      "relative": -0.009364353887000295
+    }
+  },
+  "bootstrap": {
+    "simple_vs_baseline": {
+      "nll": {
+        "b_minus_a": 0.0026971309739174123,
+        "ci95_low": -0.0008147288003126973,
+        "ci95_high": 0.006308082611582871,
+        "p_b_better": 0.0706
+      },
+      "crps": {
+        "b_minus_a": 0.0022907437389032893,
+        "ci95_low": -0.0008040717773681093,
+        "ci95_high": 0.005280046758240078,
+        "p_b_better": 0.0712
+      },
+      "mae": {
+        "b_minus_a": 0.0028713899834294457,
+        "ci95_low": -0.0018448724326441067,
+        "ci95_high": 0.007409830382751314,
+        "p_b_better": 0.1104
+      },
+      "rmse": {
+        "b_minus_a": 0.003479203953784038,
+        "ci95_low": -0.0013148686295551826,
+        "ci95_high": 0.008096717947544733,
+        "p_b_better": 0.0684
+      }
+    },
+    "learned_vs_baseline": {
+      "nll": {
+        "b_minus_a": -0.005375283824951553,
+        "ci95_low": -0.00942915330423853,
+        "ci95_high": -0.0012757328852237553,
+        "p_b_better": 0.994
+      },
+      "crps": {
+        "b_minus_a": -0.005369831311503581,
+        "ci95_low": -0.009078977497201688,
+        "ci95_high": -0.0016141343988922085,
+        "p_b_better": 0.9978
+      },
+      "mae": {
+        "b_minus_a": -0.006555635290793748,
+        "ci95_low": -0.011877096990409624,
+        "ci95_high": -0.0010151973492058886,
+        "p_b_better": 0.9888
+      },
+      "rmse": {
+        "b_minus_a": -0.009826243416107416,
+        "ci95_low": -0.015443204665016618,
+        "ci95_high": -0.004335411308879239,
+        "p_b_better": 1.0
+      }
+    },
+    "learned_vs_simple": {
+      "nll": {
+        "b_minus_a": -0.008072414798868966,
+        "ci95_low": -0.013498281639742139,
+        "ci95_high": -0.002753707775376085,
+        "p_b_better": 0.998
+      },
+      "crps": {
+        "b_minus_a": -0.007660575050406871,
+        "ci95_low": -0.01238715607320294,
+        "ci95_high": -0.0028006858654970657,
+        "p_b_better": 0.9982
+      },
+      "mae": {
+        "b_minus_a": -0.009427025274223191,
+        "ci95_low": -0.016530869830416284,
+        "ci95_high": -0.0022492968464936907,
+        "p_b_better": 0.9956
+      },
+      "rmse": {
+        "b_minus_a": -0.013305447369891454,
+        "ci95_low": -0.020719111585395845,
+        "ci95_high": -0.006212499118735708,
+        "p_b_better": 1.0
+      }
+    }
+  },
+  "utility_fit_accuracy": {
+    "simple": {
+      "P017": 0.9666666666666667,
+      "P019": 0.9333333333333333,
+      "P031": 0.9333333333333333,
+      "P038": 0.9,
+      "P039": 0.9,
+      "P041": 0.9,
+      "P042": 0.9666666666666667,
+      "P043": 0.9333333333333333,
+      "P045": 0.9333333333333333,
+      "P049": 0.9666666666666667
+    },
+    "learned": {
+      "T0_NONBUYER": 0.9666666666666667,
+      "T1": 0.9666666666666667,
+      "T2": 0.9,
+      "T3": 0.9666666666666667,
+      "T4": 0.9333333333333333,
+      "T5": 0.9333333333333333,
+      "T6": 0.9666666666666667,
+      "T7": 0.9333333333333333,
+      "T8": 0.9
+    }
+  },
+  "coverage": {
+    "learned_pairwise_utility": {
+      "train": 468,
+      "test": 147
+    },
+    "paper_probability_baseline": {
+      "train": 468,
+      "test": 147
+    },
+    "simple_pairwise_utility": {
+      "train": 468,
+      "test": 147
+    }
+  },
+  "limitations": [
+    "original selected-cell membership comes from repository precomputed full-period features",
+    "candidate price grids are shared transductive historical grids",
+    "ChatGPT conversation judgments are not independent blinded API calls",
+    "provider was non-blinded because earlier H&M results exist in conversation context"
+  ],
+  "claim_scope": "5-product temporal pilot testing pairwise relative-utility elicitation and SimPersona-inspired learned buyer types."
+}

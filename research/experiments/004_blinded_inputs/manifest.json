@@ -1,0 +1,50 @@
+{
+  "experiment": "004_gpt56_persona_richness",
+  "seed": 20260814,
+  "n_products": 100,
+  "n_matched_states": 50,
+  "n_paper_personas": 50,
+  "contains_demand_targets": false,
+  "product_input_columns": [
+    "article_id",
+    "prod_name",
+    "product_type_name",
+    "colour_group_name",
+    "graphical_appearance_name",
+    "department_name",
+    "index_name",
+    "section_name",
+    "garment_group_name",
+    "detail_desc",
+    "prices_json",
+    "n_prices"
+  ],
+  "matched_state_columns": [
+    "state_id",
+    "customer_hash",
+    "stratum",
+    "age_bin",
+    "engagement_bin",
+    "price_tier",
+    "top_product_type",
+    "age",
+    "txn_count",
+    "txn_per_month",
+    "mean_price",
+    "coarse_state",
+    "rich_state"
+  ],
+  "paper_persona_columns": [
+    "persona_id",
+    "n_customers",
+    "age_bin",
+    "engagement_bin",
+    "price_tier",
+    "taste_bucket",
+    "txn_q25",
+    "txn_q75",
+    "price_q25",
+    "price_q75",
+    "persona_prompt"
+  ]
+}

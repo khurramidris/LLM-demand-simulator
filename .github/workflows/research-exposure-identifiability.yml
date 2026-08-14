@@ -1,0 +1,84 @@
+name: research-exposure-identifiability
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/research_exposure_identifiability.py"
+      - "research/experiments/001_exposure_identifiability.md"
+      - ".github/workflows/research-exposure-identifiability.yml"
+      - "demand_sim/**"
+  workflow_dispatch:
+    inputs:
+      n_splits:
+        description: "Number of deterministic product splits"
+        required: false
+        default: "3"
+      models:
+        description: "Model list (space separated)"
+        required: false
+        default: "llm-mix-cal"
+
+jobs:
+  exposure-profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install minimal research dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            numpy==2.2.6 \
+            pandas==2.2.3 \
+            scipy==1.15.3 \
+            cvxpy==1.6.5 \
+            tqdm==4.67.1
+
+      - name: Verify committed baseline artifact
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          p = "outputs/demand_prediction/summary_mean_metrics_test.csv"
+          df = pd.read_csv(p).set_index("model")
+          crps = float(df.loc["llm-mix-cal", "zt_avg_crps"])
+          mae = float(df.loc["llm-mix-cal", "mae"])
+          assert abs(crps - 0.9426390618243496) < 1e-12, crps
+          assert abs(mae - 1.38048553572638) < 1e-12, mae
+          print({"saved_llm_cal_crps": crps, "saved_llm_cal_mae": mae})
+          PY
+
+      - name: Run exposure profile
+        env:
+          N_SPLITS: ${{ github.event.inputs.n_splits || '3' }}
+          MODELS: ${{ github.event.inputs.models || 'llm-mix-cal' }}
+        run: |
+          python scripts/research_exposure_identifiability.py \
+            --n-splits "$N_SPLITS" \
+            --models $MODELS \
+            --exposure-grid 100 150 200 250 350 500 750 1000
+
+      - name: Print experiment summary
+        if: always()
+        run: |
+          if [ -f outputs/research/exposure_identifiability/split_summary.csv ]; then
+            cat outputs/research/exposure_identifiability/split_summary.csv
+          fi
+          if [ -f outputs/research/exposure_identifiability/decision.json ]; then
+            cat outputs/research/exposure_identifiability/decision.json
+          fi
+
+      - name: Upload research outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exposure-identifiability-results
+          path: outputs/research/exposure_identifiability/
+          if-no-files-found: warn

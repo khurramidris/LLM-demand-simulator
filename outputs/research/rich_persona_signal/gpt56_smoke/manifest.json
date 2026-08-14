@@ -1,0 +1,41 @@
+{
+  "protocol": "GPT56-MATCHED-CELL-SMOKE-v1",
+  "model_provider": "ChatGPT conversation model",
+  "model": "GPT-5.6 Sol",
+  "seed": 2025,
+  "n_personas": 10,
+  "n_products": 5,
+  "logical_calls_per_arm": 50,
+  "total_logical_calls": 100,
+  "chosen_personas": [
+    "P017",
+    "P019",
+    "P031",
+    "P038",
+    "P039",
+    "P041",
+    "P042",
+    "P043",
+    "P045",
+    "P049"
+  ],
+  "chosen_products": [
+    397068015,
+    539723038,
+    547780003,
+    562245006,
+    562245059
+  ],
+  "only_intentional_prompt_difference": "pre-cutoff behavioral-history enrichment for the same original H&M population cell",
+  "evaluation_scope": [
+    "strict JSON/schema validity",
+    "price-response monotonicity",
+    "paired probability shift magnitude",
+    "whether rich-minus-control shifts covary with pre-cutoff trouser-history share"
+  ],
+  "not_claimed": [
+    "held-out aggregate demand improvement",
+    "causal price elasticity",
+    "commercial validation"
+  ]
+}
